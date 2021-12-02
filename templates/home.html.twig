@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block body %}
+	<h2 class="text-xl font-medium mt-4">Profit Dashboard</h2>
+    <div class="row my-4">
+        {{ form(searchForm) }}
+    </div>
+    <div class="flex space-x-4 my-4">
+        {% include "components/dashboard-item.html.twig" with {title: "Revenue", value: dashboard.revenue, currency: "€"} %}
+        {% include "components/dashboard-item.html.twig" with {title: "Orders", value: dashboard.orders,} %}
+        {% include "components/dashboard-item.html.twig" with {title: "AOV", value: dashboard.aov, currency: "€"} %}
+    </div>
+    <div class="row">
+        <code>{{dump(orders)}}</code>
+        {% for order in orders %}
+        <div class="flex space-x-4 my-4">
+            <div>{{ order.name }}</div>
+            <div>{{ order.created_at | date('d-m-Y') }}</div>
+            <div>{{ order.total_price }}</div>
+            <div>{{ order.confirmed }}</div>
+            <div>{{ order.financial_status }}</div>
+            <div>{{ order.cancel_reason != null ? 'canceled' }}</div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

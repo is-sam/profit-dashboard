@@ -22,8 +22,8 @@ class AuthController extends AbstractController
     /**
      * @Route("/auth/login/{shop}", name="auth_login")
      */
-    public function auth(Session $session, string $shop) {
-        $oAuthResponse = OAuth::begin($shop, '/auth/callback', true, function (OAuthCookie $cookie) use($session) {
+    public function auth(string $shop) {
+        $oAuthResponse = OAuth::begin($shop, '/auth/callback', true, function (OAuthCookie $cookie) {
             $cookie = Cookie::create($cookie->getName())
                 ->withValue($cookie->getValue())
                 ->withExpires($cookie->getExpire())
@@ -33,11 +33,9 @@ class AuthController extends AbstractController
             $response->headers->setCookie($cookie);
             $response->sendHeaders();
 
-            // $session->cookies->set($cookie->getName(), $cookie);
             return true;
         });
-        // dd($oAuthResponse);
-        // dd($request);
+
         return new RedirectResponse($oAuthResponse);
     }
 
@@ -45,12 +43,11 @@ class AuthController extends AbstractController
      * @Route("/auth/callback", name="auth_callback")
      */
     public function callback(Request $request, Session $session) {
-        // dd($session, $request);
         $shopifySession = OAuth::callback($request->cookies->all(), $request->query->all());
-        // dump($request->cookies->all(), $request->query->all());
-        // dd($shopifySession);
+
         $session->set('accessToken', $shopifySession->getAccessToken());
         $session->set('shop', $shopifySession->getShop());
-        return new Response("<h3>callback route</h3>");
+
+        return new Response("<h3>Connected to Shopify</h3><br><button href='/'>Go Home</button>");
     }
 }

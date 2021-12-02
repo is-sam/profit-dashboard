@@ -4,7 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    shopify.api.key: '%env(SHOPIFY_API_KEY)%'
+    shopify.api.secret: '%env(SHOPIFY_API_SECRET)%'
+    shopify.app.scopes: '%env(SHOPIFY_APP_SCOPES)%'
+    shopify.app.hostname: '%env(SHOPIFY_APP_HOST_NAME)%'
 services:
     # default configuration for services in *this* file
     _defaults:

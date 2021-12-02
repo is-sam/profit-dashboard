@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Service;
 
 use Shopify\Auth\Session;
 use Shopify\Auth\SessionStorage;
