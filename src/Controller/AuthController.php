@@ -23,6 +23,7 @@ class AuthController extends AbstractController
      * @Route("/auth/login/{shop}", name="auth_login")
      */
     public function auth(string $shop) {
+        $shop = 'issam-dev-store.myshopify.com'; // TODO: handle this dynamically
         $oAuthResponse = OAuth::begin($shop, '/auth/callback', true, function (OAuthCookie $cookie) {
             $cookie = Cookie::create($cookie->getName())
                 ->withValue($cookie->getValue())

@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Exception\ShopifySessionDataEmptyException;
 use App\Form\Type\DashboardSearchType;
 use App\Form\Model\DashboardSearch;
 use App\Service\DashboardService;
+use App\Service\FacebookAPIService;
 use App\Service\ShopifyAdminAPIService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,6 +25,7 @@ class DefaultController extends AbstractController
     public function index(
         Request $request,
         ShopifyAdminAPIService $adminAPI,
+        FacebookAPIService $facebookAPI,
         DashboardService $dashboardService
     ) {
         $dashboardSearch = new DashboardSearch();
@@ -33,10 +38,17 @@ class DefaultController extends AbstractController
         }
 
         // REST call: get orders by date range
-        $orders = $adminAPI->getOrders($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
+        try {
+            $orders = $adminAPI->getOrders($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
+        } catch (ShopifySessionDataEmptyException $e) {
+            return $this->redirectToRoute('auth_login', ['shop' => 'shop']);
+        }
+
+        // REST call: get Facebook Ad spend
+        $fbAdSpend = $facebookAPI->getAdSpendByDate($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
 
         // calculate dashboard data
-        $dashboard = $dashboardService->calculateData($orders);
+        $dashboard = $dashboardService->calculateData($orders, $fbAdSpend);
 
         return $this->render('home.html.twig', [
             'searchForm'    => $searchForm->createView(),

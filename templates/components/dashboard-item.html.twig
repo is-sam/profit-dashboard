@@ -1,4 +1,10 @@
 <div class="flex-1 bg-white rounded p-4 shadow">
 	<h3 class="text-l">{{ title }}</h3>
-	<p class="text-2xl font-bold">{{ currency | default('') }}{{ value }}</p>
+	<p class="text-2xl font-bold">
+		{% if type == 'money' %}
+			{{ value | format_currency('EUR') }}
+		{% else %}
+			{{ value }}
+		{% endif %}
+	</p>
 </div>

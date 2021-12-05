@@ -1,4 +1,11 @@
 {
+    "name": "is-sam/test_symfony",
+    "authors": [
+        {
+            "name": "Issam Mejdoubi",
+            "email": "epsilon.digital.ltd@gmail.com"
+        }
+    ],
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
@@ -7,6 +14,7 @@
         "php": ">=7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "facebook/php-business-sdk": "^8.0.3",
         "psr/log": "1.1.*",
         "sensio/framework-extra-bundle": "^6.2",
         "shopify/shopify-api": "^1.0",
@@ -17,7 +25,9 @@
         "symfony/framework-bundle": "5.3.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/runtime": "5.3.*",
-        "symfony/yaml": "5.3.*"
+        "symfony/yaml": "5.3.*",
+        "twig/extra-bundle": "^3.3",
+        "twig/intl-extra": "^3.3"
     },
     "config": {
         "optimize-autoloader": true,

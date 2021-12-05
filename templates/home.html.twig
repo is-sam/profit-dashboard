@@ -5,21 +5,14 @@
         {{ form(searchForm) }}
     </div>
     <div class="flex space-x-4 my-4">
-        {% include "components/dashboard-item.html.twig" with {title: "Revenue", value: dashboard.revenue, currency: "€"} %}
-        {% include "components/dashboard-item.html.twig" with {title: "Orders", value: dashboard.orders,} %}
-        {% include "components/dashboard-item.html.twig" with {title: "AOV", value: dashboard.aov, currency: "€"} %}
+        {% include "components/dashboard-item.html.twig" with {title: "Revenue", value: dashboard.revenue, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "Orders", value: dashboard.orders, type: 'number'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "AOV", value: dashboard.aov, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "Profit", value: dashboard.profit, type: 'money'} %}
     </div>
-    <div class="row">
-        <code>{{dump(orders)}}</code>
-        {% for order in orders %}
-        <div class="flex space-x-4 my-4">
-            <div>{{ order.name }}</div>
-            <div>{{ order.created_at | date('d-m-Y') }}</div>
-            <div>{{ order.total_price }}</div>
-            <div>{{ order.confirmed }}</div>
-            <div>{{ order.financial_status }}</div>
-            <div>{{ order.cancel_reason != null ? 'canceled' }}</div>
-        </div>
-        {% endfor %}
+    <div class="flex space-x-4 my-4">
+        {% include "components/dashboard-item.html.twig" with {title: "Facebok Ad Spend", value: dashboard.fbAdSpend, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "CPA", value: dashboard.cpa, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "COGS", value: dashboard.cogs, type: 'money'} %}
     </div>
 {% endblock %}

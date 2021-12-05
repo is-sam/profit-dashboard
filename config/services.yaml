@@ -8,6 +8,10 @@ parameters:
     shopify.api.secret: '%env(SHOPIFY_API_SECRET)%'
     shopify.app.scopes: '%env(SHOPIFY_APP_SCOPES)%'
     shopify.app.hostname: '%env(SHOPIFY_APP_HOST_NAME)%'
+    facebook.app.id: '%env(FACEBOOK_APP_ID)%'
+    facebook.app.secret: '%env(FACEBOOK_APP_SECRET)%'
+    facebook.access.token: '%env(FACEBOOK_ACCESS_TOKEN)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:

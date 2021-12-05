@@ -2,14 +2,13 @@
 
 namespace App\EventSubscriber;
 
-use Shopify\Auth\FileSessionStorage;
-use Shopify\Context;
+use FacebookAds\Api;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class ShopifyContextSubscriber implements EventSubscriberInterface
+class FacebookContextSubscriber implements EventSubscriberInterface
 {
     protected ParameterBagInterface $parameterBagInterface;
 
@@ -23,15 +22,10 @@ class ShopifyContextSubscriber implements EventSubscriberInterface
 
     public function onKernelController(ControllerEvent $event)
     {
-        Context::initialize(
-            $this->parameterBagInterface->get('shopify.api.key'),
-            $this->parameterBagInterface->get('shopify.api.secret'),
-            $this->parameterBagInterface->get('shopify.app.scopes'),
-            $this->parameterBagInterface->get('shopify.app.hostname'),
-            new FileSessionStorage('/tmp/php_sessions'),
-            '2021-10',
-            true,
-            false,
+        Api::init(
+            $this->parameterBagInterface->get('facebook.app.id'),
+            $this->parameterBagInterface->get('facebook.app.secret'),
+            $this->parameterBagInterface->get('facebook.access.token')
         );
     }
 
