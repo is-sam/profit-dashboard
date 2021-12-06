@@ -4,7 +4,6 @@ namespace App\Service;
 
 use DateTime;
 use Exception;
-use FacebookAds\Api;
 use FacebookAds\Object\AdAccount;
 
 /**

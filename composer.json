@@ -14,7 +14,11 @@
         "php": ">=7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "facebook/php-business-sdk": "^8.0.3",
+        "composer/package-versions-deprecated": "1.11.99.4",
+        "doctrine/doctrine-bundle": "^2.5",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/orm": "^2.10",
+        "facebook/php-business-sdk": "^12.0.1",
         "psr/log": "1.1.*",
         "sensio/framework-extra-bundle": "^6.2",
         "shopify/shopify-api": "^1.0",
@@ -24,6 +28,7 @@
         "symfony/form": "5.3.*",
         "symfony/framework-bundle": "5.3.*",
         "symfony/monolog-bundle": "^3.0",
+        "symfony/proxy-manager-bridge": "5.3.*",
         "symfony/runtime": "5.3.*",
         "symfony/yaml": "5.3.*",
         "twig/extra-bundle": "^3.3",
@@ -75,6 +80,7 @@
     },
     "require-dev": {
         "symfony/debug-bundle": "5.3.*",
+        "symfony/maker-bundle": "^1.36",
         "symfony/stopwatch": "5.3.*",
         "symfony/web-profiler-bundle": "5.3.*"
     }

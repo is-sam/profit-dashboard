@@ -2,6 +2,9 @@
 
 namespace App\EventSubscriber;
 
+use App\Entity\ShopifySession;
+use App\Repository\ShopifySessionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Shopify\Auth\Session;
 use Shopify\Auth\SessionStorage;
 
@@ -10,6 +13,16 @@ use Shopify\Auth\SessionStorage;
  */
 class ShopifySessionStorage implements SessionStorage
 {
+    protected EntityManagerInterface $entityManager;
+
+    /**
+     * Class constructor.
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * Internally handles storing the given session object.
      *
@@ -19,8 +32,20 @@ class ShopifySessionStorage implements SessionStorage
      */
     public function storeSession(Session $session): bool
     {
-        //TODO: implement storeSession()
-        return false;
+        $shopifySession = (new ShopifySession())
+            ->setIdentifier($session->getId())
+            ->setShop($session->getShop())
+            ->setState($session->getState())
+            ->setExpires($session->getExpires())
+            ->setOnlineAccessInfo($session->getOnlineAccessInfo())
+            ->setAccessToken($session->getAccessToken())
+            ->setScope($session->getScope())
+            ->setIsOnline($session->isOnline())
+        ;
+        $this->entityManager->persist($shopifySession);
+        $this->entityManager->flush();
+
+        return true;
     }
 
     /**
@@ -32,8 +57,19 @@ class ShopifySessionStorage implements SessionStorage
      */
     public function loadSession(string $sessionId)
     {
-        //TODO: implement loadSession()
-        return null;
+        $session = $this->entityManager->getRepository(ShopifySession::class)->findOneBy(['identifier' => $sessionId]);
+
+        if (!$session) {
+            return null;
+        }
+
+        $shopifySession = new Session($session->getIdentifier(), $session->getShop(), $session->getIsOnline(), $session->getState());
+        $session->getAccessToken() and $shopifySession->setAccessToken($session->getAccessToken());
+        $session->getScope() and $shopifySession->setScope($session->getScope());
+        $session->getExpires() and $shopifySession->setExpires($session->getExpires());
+        $session->getOnlineAccessInfo() and $shopifySession->setOnlineAccessInfo($session->getOnlineAccessInfo());
+
+        return $shopifySession;
     }
 
     /**
@@ -45,7 +81,15 @@ class ShopifySessionStorage implements SessionStorage
      */
     public function deleteSession(string $sessionId): bool
     {
-        //TODO: implement deleteSession()
-        return false;
+        $session = $this->entityManager->getRepository(ShopifySession::class)->findOneBy(['identifier' => $sessionId]);
+
+        if (!$session) {
+            return false;
+        }
+
+        $this->entityManager->remove($session);
+        $this->entityManager->flush();
+
+        return true;
     }
 }

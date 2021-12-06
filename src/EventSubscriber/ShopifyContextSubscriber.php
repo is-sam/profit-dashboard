@@ -12,13 +12,15 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class ShopifyContextSubscriber implements EventSubscriberInterface
 {
     protected ParameterBagInterface $parameterBagInterface;
+    protected ShopifySessionStorage $shopifySessionStorage;
 
     /**
      * Class constructor.
      */
-    public function __construct(ParameterBagInterface $parameterBagInterface)
+    public function __construct(ParameterBagInterface $parameterBagInterface, ShopifySessionStorage $shopifySessionStorage)
     {
         $this->parameterBagInterface = $parameterBagInterface;
+        $this->shopifySessionStorage = $shopifySessionStorage;
     }
 
     public function onKernelController(ControllerEvent $event)
@@ -28,7 +30,7 @@ class ShopifyContextSubscriber implements EventSubscriberInterface
             $this->parameterBagInterface->get('shopify.api.secret'),
             $this->parameterBagInterface->get('shopify.app.scopes'),
             $this->parameterBagInterface->get('shopify.app.hostname'),
-            new FileSessionStorage('/tmp/php_sessions'),
+            $this->shopifySessionStorage,
             '2021-10',
             true,
             false,
