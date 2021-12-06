@@ -49,6 +49,6 @@ class AuthController extends AbstractController
         $session->set('accessToken', $shopifySession->getAccessToken());
         $session->set('shop', $shopifySession->getShop());
 
-        return new Response("<h3>Connected to Shopify</h3><br><button href='/'>Go Home</button>");
+        return new Response("<h3>Connected to Shopify</h3><br><a href='/'>Go Home</a>");
     }
 }
