@@ -14,9 +14,9 @@ class DashboardSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('dateStart', DateType::class)
-            ->add('dateEnd', DateType::class)
-            ->add('Filter', SubmitType::class)
+            ->add('dateStart', DateType::class, ['label' => 'dashboard.filter.datestart'])
+            ->add('dateEnd', DateType::class, ['label' => 'dashboard.filter.dateend'])
+            ->add('submit', SubmitType::class, ['label' => 'dashboard.filter.submit'])
         ;
     }
 

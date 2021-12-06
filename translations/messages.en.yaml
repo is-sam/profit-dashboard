@@ -1,0 +1,11 @@
+dashboard.title: Profit Dashboard
+dashboard.indicators.revenue: Revenue
+dashboard.indicators.orders: Orders
+dashboard.indicators.aov: AOV
+dashboard.indicators.profit: Profit
+dashboard.indicators.fbadspend: Facebook Ad Spend
+dashboard.indicators.cpa: CPA
+dashboard.indicators.cogs: COGS
+dashboard.filter.datestart: Date Start
+dashboard.filter.dateend: Date End
+dashboard.filter.submit: Filter

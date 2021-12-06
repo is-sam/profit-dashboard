@@ -1,18 +1,18 @@
 {% extends "base.html.twig" %}
 {% block body %}
-	<h2 class="text-xl font-medium mt-4">Profit Dashboard</h2>
+	<h2 class="text-xl font-medium mt-4">{{ 'dashboard.title' | trans }}</h2>
     <div class="row my-4">
         {{ form(searchForm) }}
     </div>
     <div class="flex space-x-4 my-4">
-        {% include "components/dashboard-item.html.twig" with {title: "Revenue", value: dashboard.revenue, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "Orders", value: dashboard.orders, type: 'number'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "AOV", value: dashboard.aov, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "Profit", value: dashboard.profit, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.revenue" | trans, value: dashboard.revenue, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.orders" | trans, value: dashboard.orders, type: 'number'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.aov" | trans, value: dashboard.aov, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.profit" | trans, value: dashboard.profit, type: 'money'} %}
     </div>
     <div class="flex space-x-4 my-4">
-        {% include "components/dashboard-item.html.twig" with {title: "Facebok Ad Spend", value: dashboard.fbAdSpend, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "CPA", value: dashboard.cpa, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "COGS", value: dashboard.cogs, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.fbadspend" | trans, value: dashboard.fbAdSpend, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.cpa" | trans, value: dashboard.cpa, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.cogs" | trans, value: dashboard.cogs, type: 'money'} %}
     </div>
 {% endblock %}
