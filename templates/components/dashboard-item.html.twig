@@ -3,6 +3,8 @@
 	<p class="text-2xl font-bold">
 		{% if type == 'money' %}
 			{{ value | format_currency('EUR') }}
+		{% elseif type == 'float' %}
+			{{ value | round(2) }}
 		{% else %}
 			{{ value }}
 		{% endif %}

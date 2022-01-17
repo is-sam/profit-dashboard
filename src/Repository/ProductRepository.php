@@ -36,15 +36,26 @@ class ProductRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Product
+    public function findByShop(string $shop): array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->join('p.shop', 's')
+            ->andWhere('s.url = :shop')
+            ->setParameter('shop', $shop)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+
+    public function getProductsWithVariantsByShop(string $shop): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.shop', 's')
+            ->join('p.variants', 'v', 'with', 'v.product = p.id')
+            ->andWhere('s.url = :shop')
+            ->setParameter('shop', $shop)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

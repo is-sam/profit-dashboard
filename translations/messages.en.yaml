@@ -6,6 +6,11 @@ dashboard.indicators.profit: Profit
 dashboard.indicators.fbadspend: Facebook Ad Spend
 dashboard.indicators.cpa: CPA
 dashboard.indicators.cogs: COGS
+dashboard.indicators.margin: Margin
+dashboard.indicators.totaladspend: Total Ad Spend
+dashboard.indicators.roas: Global ROAS
 dashboard.filter.datestart: Date Start
 dashboard.filter.dateend: Date End
 dashboard.filter.submit: Filter
+
+settings.title: Settings

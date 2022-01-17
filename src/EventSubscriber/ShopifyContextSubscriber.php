@@ -17,8 +17,10 @@ class ShopifyContextSubscriber implements EventSubscriberInterface
     /**
      * Class constructor.
      */
-    public function __construct(ParameterBagInterface $parameterBagInterface, ShopifySessionStorage $shopifySessionStorage)
-    {
+    public function __construct(
+        ParameterBagInterface $parameterBagInterface,
+        ShopifySessionStorage $shopifySessionStorage
+    ) {
         $this->parameterBagInterface = $parameterBagInterface;
         $this->shopifySessionStorage = $shopifySessionStorage;
     }

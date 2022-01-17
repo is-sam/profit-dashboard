@@ -1,0 +1,41 @@
+<form method="post" name="sync">
+    <button type="submit">Sync Products</button>
+</form>
+
+{% if products %}
+<table class="table-auto w-full">
+    <thead>
+        <tr class="text-left">
+            {# <th>Image</th> #}
+            {# <th>Handle</th> #}
+            <th>Title</th>
+            <th>Variant</th>
+            <th>Cost</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for product in products %}
+            <tr class="bg-gray-600 text-gray-200 p-4">
+                {# <td><img src="https://via.placeholder.com/35" alt="Product Thumbnail"></td> #}
+                {# <td>{{ product.handle }}</td> #}
+                <td>{{ product.title }}</td>
+                <td>{{ product.variants | length }}</td>
+                <td>-</td>
+                {# <td>{{ product.avg_cost | format_currency('EUR') }} {{ (product.variants | length) > 1 ? '(average)'}}</td> #}
+            </tr>
+            {% for variant in product.variants %}
+                <tr class="bg-gray-400 p-4">
+                    {# <td><img src="https://via.placeholder.com/35" alt="Product Thumbnail"></td> #}
+                    {# <td>-</td> #}
+                    <td>-</td>
+                    <td>{{ variant.title }}</td>
+                    <td>{{ variant.cost ? (variant.cost | format_currency('EUR')) : 'N/A' }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Product list is empty, try syncing procuts first</p>
+{% endif %}

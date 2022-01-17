@@ -23,7 +23,7 @@ class FacebookAPIService
         $this->adAccountId = $this->getLinkedAdAccount();
     }
 
-    public function getAdSpendByDate(DateTime $dateStart, DateTime $dateEnd): int
+    public function getAdSpendByDate(DateTime $dateStart, DateTime $dateEnd): float
     {
         if (empty($this->adAccountId)) {
             return null;
@@ -48,7 +48,9 @@ class FacebookAPIService
             throw new Exception("key 'orders' not found in getOrders() response");
         }
 
-        return $response['data'][0][self::FIELD_SPEND];
+        $spend = !empty($response['data']) ? $response['data'][0][self::FIELD_SPEND] : 0;
+
+        return $spend;
     }
 
     public function getLinkedAdAccount(): string
