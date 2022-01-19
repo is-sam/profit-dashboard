@@ -7,6 +7,7 @@ use App\Service\ShopifyAdminAPIService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -20,7 +21,8 @@ class SettingsController extends AbstractController
     public function index(
         Request $request,
         ProductRepository $productRepository,
-        ShopifyAdminAPIService $adminAPI
+        ShopifyAdminAPIService $adminAPI,
+        SessionInterface $session
     ) {
         $shop = $request->query->get('shop');
 
@@ -32,7 +34,8 @@ class SettingsController extends AbstractController
         $products = $productRepository->getProductsWithVariantsByShop($shop);
 
         return $this->render('settings/home.html.twig', [
-            'products'  => $products
+            'products'  => $products,
+            'shop'      => $shop
         ]);
     }
 }

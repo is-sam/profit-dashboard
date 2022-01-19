@@ -10,8 +10,6 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Shopify\Clients\Rest;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class ShopifyAdminAPIService.
@@ -21,7 +19,7 @@ class ShopifyAdminAPIService
     public const ORDERS_TOTAL_PRICE = 'total_price';
     public const ORDERS_FINANCIAL_STATUS = 'financial_status';
 
-    protected string $shop;
+    protected string|null $shop = null;
     protected Rest|null $client = null;
 
     protected EntityManagerInterface $entityManager;
@@ -57,7 +55,19 @@ class ShopifyAdminAPIService
             throw new ShopifySessionDataEmptyException();
         }
 
+        // check access token & scopes
         $this->client = new Rest($shop->getUrl(), $shop->getAccessToken());
+
+        $response = $this->client
+            ->get("products/count")
+            ->getDecodedBody();
+
+        if (array_key_exists('errors', $response)) {
+            if ($response['errors'] === '[API] Invalid API key or access token (unrecognized login or wrong password)') {
+                throw new ShopifySessionDataEmptyException();
+            }
+            throw new Exception("Error fetching /admin/oauth/access_scopes.json: {$response['errors']}");
+        }
 
         return $this->client;
     }
@@ -110,7 +120,7 @@ class ShopifyAdminAPIService
         $response = $client->get("products", [], $params)
             ->getDecodedBody();
 
-        if (!array_key_exists('products', $response)) {
+        if (array_key_exists('errors', $response)) {
             throw new Exception("key 'products' not found in getProducts() response");
         }
 
@@ -138,7 +148,7 @@ class ShopifyAdminAPIService
         $response = $client->get('inventory_items', [], $params)
             ->getDecodedBody();
 
-        if (!array_key_exists('inventory_items', $response)) {
+        if (array_key_exists('errors', $response)) {
             throw new Exception("key 'inventory_items' not found in getInventoryItems() response");
         }
 
@@ -162,7 +172,7 @@ class ShopifyAdminAPIService
         $response = $client->get("inventory_items/$id", [], $params)
             ->getDecodedBody();
 
-        if (!array_key_exists('inventory_item', $response)) {
+        if (array_key_exists('errors', $response)) {
             throw new Exception("key 'inventory_item' not found in getInventoryItem() response");
         }
 

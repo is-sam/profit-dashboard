@@ -6,24 +6,25 @@ use App\Entity\Shop;
 use App\Repository\ShopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Shopify\Auth\OAuth;
-use Shopify\Auth\OAuthCookie;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Shopify\Auth\FileSessionStorage;
 use Shopify\Clients\Http;
-use Shopify\Context;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class AuthController.
  */
 class AuthController extends AbstractController
 {
+    /**
+     * @Route("/auth/login", name="auth_login")
+     */
+    public function login()
+    {
+        return $this->render('auth/login.html.twig');
+    }
+
     /**
      * @Route("/auth/login/{shop}", name="auth_login")
      */
@@ -67,6 +68,6 @@ class AuthController extends AbstractController
         // $session->set('accessToken', $shop->getAccessToken());
         // $session->set('shop', $shop->getUrl());
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('home', ['shop' => $shop]);
     }
 }

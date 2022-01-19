@@ -9,3 +9,4 @@ services:
       MYSQL_ROOT_PASSWORD: dev
     ports:
       - 3306:3306
+    command: mysqld --general-log=1 --general-log-file=/var/log/mysql/general-log.log

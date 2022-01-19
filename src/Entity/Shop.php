@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ShopRepository::class)
@@ -51,6 +52,16 @@ class Shop
         $this->creationDate = new DateTime();
         $this->adSpendSources = new ArrayCollection();
         $this->adSpendAccounts = new ArrayCollection();
+    }
+
+    public function getUserIdentifier()
+    {
+        return $this->url;
+    }
+
+    public function getRoles()
+    {
+        return [];
     }
 
     public function getId(): ?int
