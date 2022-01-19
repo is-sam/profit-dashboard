@@ -22,17 +22,17 @@
         "psr/log": "1.1.*",
         "sensio/framework-extra-bundle": "^6.2",
         "shopify/shopify-api": "^1.0",
-        "symfony/console": "5.3.*",
-        "symfony/dotenv": "5.3.*",
+        "symfony/console": "5.4.*",
+        "symfony/dotenv": "5.4.*",
         "symfony/flex": "^1.3.1",
-        "symfony/form": "5.3.*",
-        "symfony/framework-bundle": "5.3.*",
+        "symfony/form": "5.4.*",
+        "symfony/framework-bundle": "5.4.*",
         "symfony/monolog-bundle": "^3.0",
-        "symfony/proxy-manager-bridge": "5.3.*",
-        "symfony/runtime": "5.3.*",
-        "symfony/security-bundle": "5.3.*",
-        "symfony/translation": "5.3.*",
-        "symfony/yaml": "5.3.*",
+        "symfony/proxy-manager-bridge": "5.4.*",
+        "symfony/runtime": "5.4.*",
+        "symfony/security-bundle": "5.4.*",
+        "symfony/translation": "5.4.*",
+        "symfony/yaml": "5.4.*",
         "twig/extra-bundle": "^3.3",
         "twig/intl-extra": "^3.3"
     },
@@ -77,13 +77,13 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "5.3.*"
+            "require": "5.4.*"
         }
     },
     "require-dev": {
-        "symfony/debug-bundle": "5.3.*",
+        "symfony/debug-bundle": "5.4.*",
         "symfony/maker-bundle": "^1.36",
-        "symfony/stopwatch": "5.3.*",
-        "symfony/web-profiler-bundle": "5.3.*"
+        "symfony/stopwatch": "5.4.*",
+        "symfony/web-profiler-bundle": "5.4.*"
     }
 }
