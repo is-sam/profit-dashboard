@@ -23,8 +23,8 @@
         <div class="md:container md:mx-auto px-4">
             {% block body %}{% endblock %}
             <br>
-            {{ dump(app.request.query.all()) }}
-            {{ dump(app.session.all()) }}
+            {# {{ dump(app.request.query.all()) }}
+            {{ dump(app.session.all()) }} #}
         </div>
     </body>
 </html>

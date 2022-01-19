@@ -15,7 +15,7 @@ class ShopifySyncCommand extends Command
 
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $products = $this->adminAPI->getProducts();
 

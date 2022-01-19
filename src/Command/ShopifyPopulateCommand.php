@@ -28,7 +28,7 @@ class ShopifyPopulateCommand extends Command
 
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $client = new Rest("issam-dev-store.myshopify.com", "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");
         $variants = $this->variantRepository->findAll();
