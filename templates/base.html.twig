@@ -22,9 +22,11 @@
     <body class="min-h-screen bg-gray-50">
         <div class="md:container md:mx-auto px-4">
             {% block body %}{% endblock %}
-            <br>
-            {# {{ dump(app.request.query.all()) }}
-            {{ dump(app.session.all()) }} #}
+            {% if app.request.get('debug') %}
+                <br>
+                {{ dump(app.request.query.all()) }}
+                {{ dump(app.session.all()) }}
+            {% endif %}
         </div>
     </body>
 </html>

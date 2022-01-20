@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Shop;
+use App\Form\Type\ShopifyLoginType;
 use App\Repository\ShopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Shopify\Auth\OAuth;
@@ -11,7 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Shopify\Clients\Http;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Class AuthController.
@@ -20,19 +20,19 @@ class AuthController extends AbstractController
 {
 
     #[Route('/auth/login', name: 'auth_login_page')]
-    public function login(Request $request, AuthenticationUtils $authenticationUtils)
+    public function login(Request $request)
     {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
+        $loginForm = $this->createForm(ShopifyLoginType::class);
 
-        // last username entered by the user
-        $lastShop = $authenticationUtils->getLastUsername();
+        $loginForm->handleRequest($request);
+        if ($loginForm->isSubmitted() and $loginForm->isValid()) {
+            $formData = $loginForm->getData();
+            return $this->redirectToRoute('auth_login', ['shop' => $formData['shop']]);
+        }
 
-        dump($error, $lastShop);
-        // if ($request->isMethod('POST')) {
-        //     return $this->redirectToRoute('auth_login', ['shop' => $request->request->get('shop')]);
-        // }
-        return $this->render('auth/login.html.twig');
+        return $this->render('auth/login.html.twig', [
+            'loginForm' => $loginForm->createView()
+        ]);
     }
 
     #[Route('/auth/login/{shop}', name: 'auth_login')]
@@ -70,10 +70,12 @@ class AuthController extends AbstractController
         $entityManager->persist($shop);
         $entityManager->flush();
 
-        // $session = $request->getSession();
-        // $session->set('accessToken', $shop->getAccessToken());
-        // $session->set('shop', $shop->getUrl());
+        return $this->redirectToRoute('home');
+    }
 
-        return $this->redirectToRoute('home', ['shop' => $shop]);
+    #[Route('/auth/logout', name: 'auth_logout')]
+    public function logout()
+    {
+        return $this->redirectToRoute('auth_login_page');
     }
 }

@@ -14,3 +14,7 @@ dashboard.filter.dateend: Date End
 dashboard.filter.submit: Filter
 
 settings.title: Settings
+
+auth.login.title: Sign In with Shopify
+auth.login.shop_url: Shop URL
+auth.login.submit: Sign In

@@ -15,27 +15,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SettingsController extends AbstractController
 {
-    /**
-     * @Route("/settings", name="settings_home")
-     */
+    #[Route('/settings', name: 'settings_home')]
     public function index(
         Request $request,
         ProductRepository $productRepository,
-        ShopifyAdminAPIService $adminAPI,
-        SessionInterface $session
+        ShopifyAdminAPIService $adminAPI
     ) {
-        $shop = $request->query->get('shop');
+        $shop = $request->getSession()->get('shop');
 
         if ($request->isMethod('POST')) {
-            $adminAPI->setShop($shop);
             $adminAPI->syncProducts();
         }
 
         $products = $productRepository->getProductsWithVariantsByShop($shop);
 
         return $this->render('settings/home.html.twig', [
-            'products'  => $products,
-            'shop'      => $shop
+            'products'  => $products
         ]);
     }
 }

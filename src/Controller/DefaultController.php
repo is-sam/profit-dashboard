@@ -2,13 +2,9 @@
 
 namespace App\Controller;
 
-use App\Exception\ShopifySessionDataEmptyException;
 use App\Form\Type\DashboardSearchType;
 use App\Form\Model\DashboardSearch;
-use App\Repository\VariantRepository;
 use App\Service\DashboardService;
-use App\Service\FacebookAPIService;
-use App\Service\ShopifyAdminAPIService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,18 +17,9 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(
         Request $request,
-        ShopifyAdminAPIService $adminAPI,
-        FacebookAPIService $facebookAPI,
         DashboardService $dashboardService,
-        VariantRepository $variantRepository,
     ) {
-        /** @var Shop $user */
-        $user = $this->getUser();
-        dump($user);
-        $shop = $user->getShop();
-
         $dashboardSearch = new DashboardSearch();
-
         $searchForm = $this->createForm(DashboardSearchType::class, $dashboardSearch);
 
         $searchForm->handleRequest($request);
@@ -40,26 +27,11 @@ class DefaultController extends AbstractController
             $dashboardSearch = $searchForm->getData();
         }
 
-        // REST call: get orders by date range
-        try {
-            $adminAPI->setShop($shop);
-            $orders = $adminAPI->getOrders($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
-        } catch (ShopifySessionDataEmptyException $e) {
-            return $this->redirectToRoute('auth_login', ['shop' => $shop]);
-        }
-
-        $variants = $variantRepository->getVariantsByShop($shop);
-
-        // REST call: get Facebook Ad spend
-        $fbAdSpend = $facebookAPI->getAdSpendByDate($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
-
-        // calculate dashboard data
-        $dashboard = $dashboardService->calculateData($orders, $variants, $fbAdSpend);
+        $data = $dashboardService->getData($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
 
         return $this->render('home.html.twig', [
-            'shop'          => $shop,
             'searchForm'    => $searchForm->createView(),
-            'dashboard'     => $dashboard,
+            'data'          => $data,
             'dateStart'     => $dashboardSearch->getDateStart(),
             'dateEnd'       => $dashboardSearch->getDateEnd()
         ]);

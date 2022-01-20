@@ -10,6 +10,8 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Shopify\Clients\Rest;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class ShopifyAdminAPIService.
@@ -19,55 +21,34 @@ class ShopifyAdminAPIService
     public const ORDERS_TOTAL_PRICE = 'total_price';
     public const ORDERS_FINANCIAL_STATUS = 'financial_status';
 
-    protected string|null $shop = null;
-    protected Rest|null $client = null;
-
     protected EntityManagerInterface $entityManager;
+
+    protected Shop $shop;
+    protected Rest $client;
 
     /**
      * Class constructor.
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
     {
         $this->entityManager = $entityManager;
-    }
-
-    public function setShop(string $shop)
-    {
-        $this->shop = $shop;
+        $this->shop = $security->getUser();
+        $this->client = new Rest($this->shop->getUrl(), $this->shop->getAccessToken());
     }
 
     protected function getClient()
     {
-        if ($this->shop === null) {
-            throw new Exception("Shop empty in ShopifyAdminAPIService");
-        }
-
-        if ($this->client instanceof Rest) {
-            return $this->client;
-        }
-
-        /** @var Shop $shop */
-        $shop = $this->entityManager->getRepository(Shop::class)
-            ->findOneBy(['url' => $this->shop]);
-
-        if (empty($shop)) {
-            throw new ShopifySessionDataEmptyException();
-        }
-
         // check access token & scopes
-        $this->client = new Rest($shop->getUrl(), $shop->getAccessToken());
+        // $response = $this->client
+        //     ->get("products/count")
+        //     ->getDecodedBody();
 
-        $response = $this->client
-            ->get("products/count")
-            ->getDecodedBody();
-
-        if (array_key_exists('errors', $response)) {
-            if ($response['errors'] === '[API] Invalid API key or access token (unrecognized login or wrong password)') {
-                throw new ShopifySessionDataEmptyException();
-            }
-            throw new Exception("Error fetching /admin/oauth/access_scopes.json: {$response['errors']}");
-        }
+        // if (array_key_exists('errors', $response)) {
+        //     if ($response['errors'] === '[API] Invalid API key or access token (unrecognized login or wrong password)') {
+        //         throw new ShopifySessionDataEmptyException();
+        //     }
+        //     throw new Exception("Error fetching /admin/oauth/access_scopes.json: {$response['errors']}");
+        // }
 
         return $this->client;
     }

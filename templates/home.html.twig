@@ -11,7 +11,7 @@
         {{ form(searchForm) }}
         <div class="col-start-4 justify-self-end">
             <button type="button" class="px-4 py-3 bg-blue-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
-                <a href="{{ path('settings_home', {'shop': shop}) }}">
+                <a href="{{ path('settings_home') }}">
                     {# <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                     </svg> #}
@@ -22,16 +22,16 @@
         </div>
     </div>
     <div class="grid grid-cols-5 gap-4">
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.revenue" | trans, value: dashboard.revenue, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.orders" | trans, value: dashboard.orders, type: 'number'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.aov" | trans, value: dashboard.aov, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.cogs" | trans, value: dashboard.cogs, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.margin" | trans, value: dashboard.margin, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.totaladspend" | trans, value: dashboard.totalAdSpend, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.fbadspend" | trans, value: dashboard.fbAdSpend, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.cpa" | trans, value: dashboard.cpa, type: 'money'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.roas" | trans, value: dashboard.roas, type: 'float'} %}
-        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.profit" | trans, value: dashboard.profit, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.revenue" | trans, value: data.revenue, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.orders" | trans, value: data.orders, type: 'number'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.aov" | trans, value: data.aov, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.cogs" | trans, value: data.cogs, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.margin" | trans, value: data.margin, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.totaladspend" | trans, value: data.totalAdSpend, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.fbadspend" | trans, value: data.fbAdSpend, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.cpa" | trans, value: data.cpa, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.roas" | trans, value: data.roas, type: 'float'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.profit" | trans, value: data.profit, type: 'money'} %}
     </div>
 
 {% endblock %}

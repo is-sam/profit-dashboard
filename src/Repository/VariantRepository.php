@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Shop;
 use App\Entity\Variant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,13 +20,13 @@ class VariantRepository extends ServiceEntityRepository
         parent::__construct($registry, Variant::class);
     }
 
-    public function getVariantsByShop(string $shop): array
+    public function getVariantsByShop(Shop $shop): array
     {
         return $this->createQueryBuilder('v')
             ->join('v.product', 'p')
             ->join('p.shop', 's')
             ->andWhere('s.url = :shop')
-            ->setParameter('shop', $shop)
+            ->setParameter('shop', $shop->getUrl())
             ->getQuery()
             ->getResult()
         ;
