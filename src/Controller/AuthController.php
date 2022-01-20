@@ -11,32 +11,38 @@ use Symfony\Component\Routing\Annotation\Route;
 use Shopify\Clients\Http;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Class AuthController.
  */
 class AuthController extends AbstractController
 {
-    /**
-     * @Route("/auth/login", name="auth_login")
-     */
-    public function login()
+
+    #[Route('/auth/login', name: 'auth_login_page')]
+    public function login(Request $request, AuthenticationUtils $authenticationUtils)
     {
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        // last username entered by the user
+        $lastShop = $authenticationUtils->getLastUsername();
+
+        dump($error, $lastShop);
+        // if ($request->isMethod('POST')) {
+        //     return $this->redirectToRoute('auth_login', ['shop' => $request->request->get('shop')]);
+        // }
         return $this->render('auth/login.html.twig');
     }
 
-    /**
-     * @Route("/auth/login/{shop}", name="auth_login")
-     */
+    #[Route('/auth/login/{shop}', name: 'auth_login')]
     public function auth(string $shop) {
         $oAuthResponse = OAuth::begin($shop, $this->generateUrl('auth_callback'), true);
 
         return new RedirectResponse($oAuthResponse);
     }
 
-    /**
-     * @Route("/auth/callback", name="auth_callback")
-     */
+    #[Route('/auth/callback', name: 'auth_callback')]
     public function callback(
         Request $request,
         ShopRepository $shopRepository,

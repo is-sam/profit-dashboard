@@ -18,9 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DefaultController extends AbstractController
 {
-    /**
-     * @Route("/", name="home")
-     */
+    #[Route('/', name: 'home')]
     public function index(
         Request $request,
         ShopifyAdminAPIService $adminAPI,
@@ -28,7 +26,11 @@ class DefaultController extends AbstractController
         DashboardService $dashboardService,
         VariantRepository $variantRepository,
     ) {
-        $shop = $request->query->get('shop');
+        /** @var Shop $user */
+        $user = $this->getUser();
+        dump($user);
+        $shop = $user->getShop();
+
         $dashboardSearch = new DashboardSearch();
 
         $searchForm = $this->createForm(DashboardSearchType::class, $dashboardSearch);

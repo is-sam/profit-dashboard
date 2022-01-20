@@ -2,7 +2,8 @@
 {% block body %}
     <h3>Sign Up with Shopify</h3>
 
-    <form action="">
+    <form action="" method="POST" name="login">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         <input type="text" name="shop" placeholder="your-shop-url.myshopify.com">
         <button type="submit">Sign Up</button>
     </form>

@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=ShopRepository::class)
  */
-class Shop
+class Shop implements UserInterface
 {
     /**
      * @ORM\Id
@@ -54,14 +54,19 @@ class Shop
         $this->adSpendAccounts = new ArrayCollection();
     }
 
-    public function getUserIdentifier()
+    public function getUserIdentifier(): string
     {
         return $this->url;
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
-        return [];
+        return ['ROLE_USER'];
+    }
+
+    public function eraseCredentials()
+    {
+        return;
     }
 
     public function getId(): ?int
