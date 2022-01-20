@@ -21,7 +21,7 @@ class SettingsController extends AbstractController
         ProductRepository $productRepository,
         ShopifyAdminAPIService $adminAPI
     ) {
-        $shop = $request->getSession()->get('shop');
+        $shop = $this->getUser();
 
         if ($request->isMethod('POST')) {
             $adminAPI->syncProducts();

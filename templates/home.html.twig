@@ -1,27 +1,49 @@
 {% extends "base.html.twig" %}
+
+{% block title %}Homepage{% endblock %}
+
 {% block body %}
-	<h2 class="text-xl font-medium mt-4">{{ 'dashboard.title' | trans }}</h2>
-    <div class="grid grid-cols-4">
+	<h2 class="text-2xl font-medium my-4">{{ 'dashboard.title' | trans }}</h2>
+    {# {{ form_start(searchForm) }} #}
+    <div class="grid grid-cols-4 mb-4">
         {# <div>
-            {% include "components/datepicker-tailwind.html.twig" with { label: "From" } %}
+            {% include "components/datepicker-tailwind.html.twig" with { label: "From", name: "dateStart" } %}
         </div>
         <div>
-            {% include "components/datepicker-tailwind.html.twig" with { label: "To" } %}
+            {% include "components/datepicker-tailwind.html.twig" with { label: "To", name: "dateEnd" } %}
+        </div>
+        <div>
+            <button type="submit">Filter</button>
         </div> #}
-        {{ form(searchForm) }}
+        <div class="col-span-3">
+            {{ form_start(searchForm) }}
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1">
+                        {{ form_label(searchForm.dateStart) }}
+                        {{ form_widget(searchForm.dateStart) }}
+                    </div>
+                    <div class="grid grid-cols-1">
+                        {{ form_label(searchForm.dateEnd) }}
+                        {{ form_widget(searchForm.dateEnd) }}
+                    </div>
+                    <div class="grid grid-cols-1 content-end">
+                        <div>
+                            {{ form_widget(searchForm.submit) }}
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(searchForm) }}
+            {# {{ form(searchForm) }} #}
+        </div>
         <div class="col-start-4 justify-self-end">
-            <button type="button" class="px-4 py-3 bg-blue-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
-                <a href="{{ path('settings_home') }}">
-                    {# <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                    </svg> #}
-
-                    <span class="ml-2">Settings</span>
-                </a>
-            </button>
+            <a href="{{ path('settings_home') }}" class="px-4 py-3 bg-blue-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
+                <i class="fa fa-sliders-h"></i>
+                <span class="ml-2">Settings</span>
+            </a>
         </div>
     </div>
-    <div class="grid grid-cols-5 gap-4">
+    {# {{ form_end(searchForm) }} #}
+    <div class="mt-10 grid grid-cols-5 gap-4">
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.revenue" | trans, value: data.revenue, type: 'money'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.orders" | trans, value: data.orders, type: 'number'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.aov" | trans, value: data.aov, type: 'money'} %}

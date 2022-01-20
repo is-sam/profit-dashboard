@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Product;
+use App\Entity\Shop;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,13 +48,13 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getProductsWithVariantsByShop(string $shop): array
+    public function getProductsWithVariantsByShop(Shop $shop): array
     {
         return $this->createQueryBuilder('p')
             ->join('p.shop', 's')
             ->join('p.variants', 'v', 'with', 'v.product = p.id')
             ->andWhere('s.url = :shop')
-            ->setParameter('shop', $shop)
+            ->setParameter('shop', $shop->getUrl())
             ->getQuery()
             ->getResult()
         ;
