@@ -4,20 +4,10 @@
 
 {% block body %}
 	<h2 class="text-2xl font-medium my-4">{{ 'dashboard.title' | trans }}</h2>
-    {# {{ form_start(searchForm) }} #}
     <div class="grid grid-cols-4 mb-4">
-        {# <div>
-            {% include "components/datepicker-tailwind.html.twig" with { label: "From", name: "dateStart" } %}
-        </div>
-        <div>
-            {% include "components/datepicker-tailwind.html.twig" with { label: "To", name: "dateEnd" } %}
-        </div>
-        <div>
-            <button type="submit">Filter</button>
-        </div> #}
         <div class="col-span-3">
             {{ form_start(searchForm) }}
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-4 gap-4">
                     <div class="grid grid-cols-1">
                         {{ form_label(searchForm.dateStart) }}
                         {{ form_widget(searchForm.dateStart) }}
@@ -33,27 +23,23 @@
                     </div>
                 </div>
             {{ form_end(searchForm) }}
-            {# {{ form(searchForm) }} #}
-        </div>
-        <div class="col-start-4 justify-self-end">
-            <a href="{{ path('settings_home') }}" class="px-4 py-3 bg-blue-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
-                <i class="fa fa-sliders-h"></i>
-                <span class="ml-2">Settings</span>
-            </a>
         </div>
     </div>
-    {# {{ form_end(searchForm) }} #}
+
     <div class="mt-10 grid grid-cols-5 gap-4">
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.revenue" | trans, value: data.revenue, type: 'money'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.orders" | trans, value: data.orders, type: 'number'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.aov" | trans, value: data.aov, type: 'money'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.cogs" | trans, value: data.cogs, type: 'money'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.margin" | trans, value: data.margin, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.margin_rate" | trans, value: data.margin_rate, type: 'rate'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.totaladspend" | trans, value: data.totalAdSpend, type: 'money'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.fbadspend" | trans, value: data.fbAdSpend, type: 'money'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.cpa" | trans, value: data.cpa, type: 'money'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.roas" | trans, value: data.roas, type: 'float'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.profit" | trans, value: data.profit, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.profit_rate" | trans, value: data.profit_rate, type: 'rate'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.custom_cost" | trans, value: data.custom_cost, type: 'money'} %}
     </div>
 
 {% endblock %}

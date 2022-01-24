@@ -14,8 +14,8 @@ class DashboardSearch
      */
     public function __construct()
     {
-        $this->dateStart = new DateTime();
-        $this->dateEnd = new DateTime();
+        $this->setDateStart(new DateTime());
+        $this->setDateEnd(new DateTime());
     }
 
     public function getDateStart(): DateTime
@@ -25,6 +25,7 @@ class DashboardSearch
 
     public function setDateStart(DateTime $dateStart): self
     {
+        $dateStart->setTime(0, 0, 0);
         $this->dateStart = $dateStart;
         return $this;
     }
@@ -36,6 +37,7 @@ class DashboardSearch
 
     public function setDateEnd(DateTime $dateEnd): self
     {
+        $dateEnd->setTime(23, 59, 59);
         $this->dateEnd = $dateEnd;
         return $this;
     }

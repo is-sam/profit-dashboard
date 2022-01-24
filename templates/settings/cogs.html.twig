@@ -1,41 +1,91 @@
-<form method="post" name="sync">
-    <button type="submit">Sync Products</button>
-</form>
+{% extends "base.html.twig" %}
 
-{% if products %}
-<table class="table-auto w-full">
-    <thead>
-        <tr class="text-left">
-            {# <th>Image</th> #}
-            {# <th>Handle</th> #}
-            <th>Title</th>
-            <th>Variant</th>
-            <th>Cost</th>
-        </tr>
-    </thead>
+{% block title %}Settings - COGS{% endblock %}
 
-    <tbody>
-        {% for product in products %}
-            <tr class="bg-gray-600 text-gray-200 p-4">
-                {# <td><img src="https://via.placeholder.com/35" alt="Product Thumbnail"></td> #}
-                {# <td>{{ product.handle }}</td> #}
-                <td>{{ product.title }}</td>
-                <td>{{ product.variants | length }}</td>
-                <td>-</td>
-                {# <td>{{ product.avg_cost | format_currency('EUR') }} {{ (product.variants | length) > 1 ? '(average)'}}</td> #}
+{% block body %}
+    <div class="grid grid-cols-4 mb-4">
+        <h2 class="text-2xl font-medium my-4 col-span-3">{{ 'settings.cogs.title' | trans }}</h2>
+
+        <form method="post" name="sync" class="mb-4 flex flex-row-reverse">
+            <button type="submit" class="px-4 py-3 bg-green-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
+                <i class="fa fa-sync pr-2"></i> Sync Products
+            </button>
+        </form>
+    </div>
+
+    {% if products %}
+    <table class="min-w-full leading-normal">
+        <thead>
+            <tr class="text-left border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th class="px-5 py-37">Image</th>
+                <th class="px-5 py-3">Title</th>
+                <th class="px-5 py-3">Cost</th>
             </tr>
-            {% for variant in product.variants %}
-                <tr class="bg-gray-400 p-4">
-                    {# <td><img src="https://via.placeholder.com/35" alt="Product Thumbnail"></td> #}
-                    {# <td>-</td> #}
-                    <td>-</td>
-                    <td>{{ variant.title }}</td>
-                    <td>{{ variant.cost ? (variant.cost | format_currency('EUR')) : 'N/A' }}</td>
+        </thead>
+
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-gray-800 text-sm w-1/10">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                <img src="https://via.placeholder.com/35" class="w-full h-full rounded-full" alt="Product Thumbnail">
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-gray-800 text-sm w-6/10">
+                        {{ product.title }} ({{ product.variants | length }} variants)
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-gray-800 text-sm w-3/10">-</td>
                 </tr>
+                {% for variant in product.variants %}
+                    <tr>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-gray-700 text-sm w-1/10">-</td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-gray-700 text-sm w-6/10">{{ variant.title }}</td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-gray-700 text-sm w-3/10">
+                            €<input type="text" value="{{variant.cost}}" size="3" class="py-2 text-center text-black" disabled>
+                            <button type="button" class="btn-edit" onclick="toggleEdit(this)"><i class="fa fa-edit"></i></button>
+                            <button type="submit" class="btn-save hidden" onclick="saveCost(this, {{variant.id}})"><i class="fa fa-save"></i></button>
+                        </td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p>Product list is empty, try syncing procuts first</p>
-{% endif %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Product list is empty, try syncing procuts first</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function toggleEdit(e) {
+            let editButton = e;
+            let input = e.parentElement.getElementsByTagName('input')[0];
+            let buttons = e.parentElement.getElementsByTagName('button');
+            input.disabled = !input.disabled;
+            for (button of buttons) {
+                button.classList.toggle('hidden');
+            }
+        }
+
+        function saveCost(e, variantId) {
+            let cost = e.parentElement.getElementsByTagName('input')[0].value;
+            let data = {cost: cost};
+
+            fetch(`/settings/cogs/update/${variantId}`, {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(res => {
+                console.log("Request complete! response:", res);
+                if (res.status === 200) {
+                    toggleEdit(e);
+                } else {
+                    alert(res.statusText);
+                }
+            });
+        }
+    </script>
+{% endblock %}

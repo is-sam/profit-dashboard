@@ -1,13 +1,12 @@
-{% extends "base.html.twig" %}
+{% extends "base-empty.html.twig" %}
 
 {% block title %}Sign In{% endblock %}
 
 {% block body %}
-    <h3>{{ 'auth.login.title' | trans }}</h3>
+    <div class="mt-40 max-w-lg mx-auto px-10">
+        <h3 class="text-3xl mb-10">{{ 'auth.login.title' | trans }}</h3>
 
-    {{ form(loginForm) }}
-    {# <form action="" method="POST" name="login">
-        <input type="text" name="shop" placeholder="your-shop-url.myshopify.com">
-        <button type="submit">Sign Up</button>
-    </form> #}
+        {{ form(loginForm) }}
+    </div>
+
 {% endblock %}

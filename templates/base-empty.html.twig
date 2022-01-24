@@ -25,32 +25,6 @@
         {% endblock %}
     </head>
     <body class="bg-gray-900 text-gray-200 leading-tight">
-        {% include "_sidebar.html.twig" %}
-        <div class="md:container md:mx-auto p-4 pl-60">
-            {% block body %}{% endblock %}
-            {% if app.request.get('debug') %}
-                <br>
-                {{ dump(app.request.query.all()) }}
-                {{ dump(app.session.all()) }}
-            {% endif %}
-        </div>
-        <script>
-            document.querySelectorAll('[data-modal-btn]').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    let modalName = button.dataset.modalBtn;
-                    let modal = document.querySelector(`div[data-modal=${modalName}]`);
-                    modal.classList.remove('hidden');
-                });
-            });
-
-            document.querySelectorAll('[data-modal-close]').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    let modalName = button.dataset.modalClose;
-                    console.log(modalName);
-                    let modal = document.querySelector(`div[data-modal=${modalName}]`);
-                    modal.classList.add('hidden');
-                });
-            });
-        </script>
+        {% block body %}{% endblock %}
     </body>
 </html>

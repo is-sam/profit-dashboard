@@ -46,12 +46,18 @@ class Shop implements UserInterface
      */
     private $adSpendAccounts;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CustomCost::class, mappedBy="shop")
+     */
+    private $customCosts;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->creationDate = new DateTime();
         $this->adSpendSources = new ArrayCollection();
         $this->adSpendAccounts = new ArrayCollection();
+        $this->customCosts = new ArrayCollection();
     }
 
     public function getUserIdentifier(): string
@@ -164,6 +170,36 @@ class Shop implements UserInterface
             // set the owning side to null (unless already changed)
             if ($adSpendAccount->getShop() === $this) {
                 $adSpendAccount->setShop(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CustomCost[]
+     */
+    public function getCustomCosts(): Collection
+    {
+        return $this->customCosts;
+    }
+
+    public function addCustomCost(CustomCost $customCost): self
+    {
+        if (!$this->customCosts->contains($customCost)) {
+            $this->customCosts[] = $customCost;
+            $customCost->setShop($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomCost(CustomCost $customCost): self
+    {
+        if ($this->customCosts->removeElement($customCost)) {
+            // set the owning side to null (unless already changed)
+            if ($customCost->getShop() === $this) {
+                $customCost->setShop(null);
             }
         }
 

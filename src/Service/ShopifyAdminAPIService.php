@@ -5,12 +5,10 @@ namespace App\Service;
 use App\Entity\Product;
 use App\Entity\Shop;
 use App\Entity\Variant;
-use App\Exception\ShopifySessionDataEmptyException;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Shopify\Clients\Rest;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -65,7 +63,7 @@ class ShopifyAdminAPIService
 
         $params = [
             'created_at_min' => $dateStart->format('c'),
-            'created_at_max' => $dateEnd->modify("+1 day")->format('c'),
+            'created_at_max' => $dateEnd->format('c'),
             'status'         => 'any',
             'fields'         => implode(',', $fields)
         ];
@@ -170,10 +168,8 @@ class ShopifyAdminAPIService
                 ->findOneBy(['identifier' => $shopifyProduct['id']]);
 
             if (empty($product)) {
-                $shop = $this->entityManager->getRepository(Shop::class)
-                    ->findOneBy(['url' => $this->shop]);
                 $product = new Product();
-                $product->setShop($shop);
+                $product->setShop($this->shop);
                 $product->setIdentifier($shopifyProduct['id']);
                 $this->entityManager->persist($product);
             }
@@ -203,7 +199,50 @@ class ShopifyAdminAPIService
                 }
 
                 $variant->setTitle($shopifyVariant['title']);
-                $variant->setCost($inventoryItem['cost']);
+                if ($variant->getCost() === null) {
+                    $variant->setCost($inventoryItem['cost']);
+                }
+            }
+        }
+
+        $this->entityManager->flush();
+
+        $this->getOrphanVariants();
+    }
+
+    public function getOrphanVariants()
+    {
+        $orders = $this->getOrders(new DateTime('01-01-1970'), new DateTime('now'));
+
+        /** @var Product $placeholderProduct */
+        $placeholderProduct = $this->entityManager->getRepository(Product::class)
+            ->findOneBy([
+                'shop'      => $this->shop,
+                'status'    => Product::STATUS_PLACEHOLDER
+            ]);
+
+        if (empty($placeholderProduct)) {
+            $placeholderProduct = new Product();
+            $placeholderProduct->setStatus(Product::STATUS_PLACEHOLDER);
+            $placeholderProduct->setShop($this->shop);
+        }
+
+        $variants = $placeholderProduct->getVariants();
+        $variants = array_map(fn (Variant $variant) => $variant->getTitle(), iterator_to_array($variants));
+
+        foreach ($orders as $order) {
+            foreach ($order['line_items'] as $lineItem) {
+                if ($lineItem['product_exists'] === false) {
+
+                    if (!in_array($lineItem['name'], $variants)) {
+                        $variant = (new Variant())
+                            ->setProduct($placeholderProduct)
+                            ->setTitle($lineItem['name']);
+
+                        $this->entityManager->persist($placeholderProduct);
+                        $this->entityManager->persist($variant);
+                    }
+                }
             }
         }
 
