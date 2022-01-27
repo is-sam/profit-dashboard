@@ -59,7 +59,13 @@
         "symfony/polyfill-php72": "*"
     },
     "scripts": {
+        "symfony": "symfony serve -d",
         "ngrok": "ngrok http 127.0.0.1:8000 -host-header='127.0.0.1:8000'",
+        "lt": "lt -s profitdashboard -p 8000",
+        "server": {
+            "symfony": "",
+            "lt": ""
+        },
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
