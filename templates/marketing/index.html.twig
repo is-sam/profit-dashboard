@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ source.name }}{% endblock %}
+
+{% block body %}
+    <h3 class="text-2xl font-medium my-4 col-span-3">{{ source.name }}</h3>
+
+    <div class="border rounded border-gray-700 w-full p-4">
+        {% if account %}
+            <p>Connected account: {% if adAccountId %} {{ adAccountId }} {% else %} Please select an ad account bellow !{% endif %}</p>
+
+            <a href="{{ path('marketing_source_disconnect', {slug: source.slug}) }}" class="inline-block mt-4 px-4 py-3 bg-gray-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform">
+                Disconnect
+            </a>
+        {% else %}
+            <p>No account connected</p>
+            <button class="mt-4 px-4 py-3 bg-gray-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform" onclick="loginFacebook()">
+                Connect
+            </button>
+        {% endif %}
+    </div>
+
+    {% if account %}
+    <div>
+        {# {{ dump(adAccounts) }} #}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                <form action="" method="POST">
+                {% for adAccount in adAccounts %}
+                <tr>
+                    <td>{{ adAccount.name }}</td>
+                    <td>{{ adAccount.account_id }}</td>
+                    <td>
+                        <input type="radio" name="ad_account" value="{{ adAccount.account_id }}" {% if adAccountId == adAccount.account_id %}checked{% endif %}>
+                    </td>
+                </tr>
+                {% endfor %}
+                </form>
+            </tbody>
+        </table>
+        <button onclick="saveAdAccount()">Save</button>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function loginFacebook() {
+            FB.login(function(response){
+                if (response.status === 'connected') {
+                    console.log('connected', response);
+                    let data = {userId: response.authResponse.userID};
+
+                    fetch(`/marketing/facebook-ads/set-data`, {
+                        method: "POST",
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(data)
+                    }).then(res => {
+                        console.log("Request complete! response:", res);
+                        window.location.reload();
+                    });
+                }
+            });
+        }
+
+        function saveAdAccount() {
+            let accountId = document.querySelector('input[name="ad_account"]:checked').value;
+            let data = {accountId: accountId};
+
+            fetch(`/marketing/facebook-ads/set-data`, {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(res => {
+                console.log("Request complete! response:", res);
+                window.location.reload();
+            });
+        }
+    </script>
+{% endblock %}

@@ -2,9 +2,11 @@
 
 namespace App\Service;
 
+use App\Repository\MarketingAccountRepository;
 use DateTime;
 use Exception;
 use FacebookAds\Object\AdAccount;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class FacebookAPIService.
@@ -13,17 +15,22 @@ class FacebookAPIService
 {
     protected const FIELD_SPEND = 'spend';
 
-    protected string $adAccountId;
+    protected ?string $adAccountId;
 
     /**
      * Class constructor.
      */
-    public function __construct()
+    public function __construct(Security $security, MarketingAccountRepository $marketingAccountRepository)
     {
-        $this->adAccountId = $this->getLinkedAdAccount();
+        $shop = $security->getUser();
+        $marketingAccount = $marketingAccountRepository->findOneBySourceSlugAndShop('facebook-ads', $shop);
+        if ($marketingAccount) {
+            $data = $marketingAccount->getData();
+            $this->adAccountId = $data['account_id'] ?? null;
+        }
     }
 
-    public function getAdSpendByDate(DateTime $dateStart, DateTime $dateEnd): float
+    public function getAdSpendByDate(DateTime $dateStart, DateTime $dateEnd): ?float
     {
         if (empty($this->adAccountId)) {
             return null;
@@ -31,7 +38,9 @@ class FacebookAPIService
 
         $account = new AdAccount("act_$this->adAccountId");
 
-        $fields = ['spend'];
+        $fields = [
+            self::FIELD_SPEND
+        ];
 
         $params = [
             'time_range' => [
@@ -45,7 +54,7 @@ class FacebookAPIService
             ->getContent();
 
         if (!array_key_exists('data', $response)) {
-            throw new Exception("key 'orders' not found in getOrders() response");
+            throw new Exception("key 'data' not found in getAdSpendByDate() response");
         }
 
         $spend = !empty($response['data']) ? $response['data'][0][self::FIELD_SPEND] : 0;

@@ -79,7 +79,7 @@ class DashboardCalculator
             $days = $dateDiff->days + 1;
             $totalCost = $dayCost * $days;
             $globalCost += $totalCost;
-            $this->logger->alert("CUSTOM COST {$customCost->getName()} $days x $dayCost = ($totalCost)");
+            $this->logger->info("CUSTOM COST {$customCost->getName()} $days x $dayCost = ($totalCost)");
         }
 
         return $globalCost;

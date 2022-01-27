@@ -45,6 +45,7 @@ class DashboardService
 
         // REST call: get Facebook Ad spend
         $fbAdSpend = $this->facebookAPI->getAdSpendByDate($dateStart, $dateEnd);
+        $fbAdSpend = $fbAdSpend ?? 0;
 
         // Get variants
         /** @var VariantRepository $variantRepository */

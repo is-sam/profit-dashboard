@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\AdSpendAccountRepository;
+use App\Repository\MarketingAccountRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=AdSpendAccountRepository::class)
+ * @ORM\Entity(repositoryClass=MarketingAccountRepository::class)
  */
-class AdSpendAccount
+class MarketingAccount
 {
     /**
      * @ORM\Id
@@ -18,13 +18,13 @@ class AdSpendAccount
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=AdSpendSource::class, inversedBy="adSpendAccounts")
+     * @ORM\ManyToOne(targetEntity=MarketingSource::class, inversedBy="marketingAccounts")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $AdSpendSource;
+    private $marketingSource;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Shop::class, inversedBy="adSpendAccounts")
+     * @ORM\ManyToOne(targetEntity=Shop::class, inversedBy="marketingAccounts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $shop;
@@ -39,14 +39,14 @@ class AdSpendAccount
         return $this->id;
     }
 
-    public function getAdSpendSource(): ?AdSpendSource
+    public function getMarketingSource(): ?MarketingSource
     {
-        return $this->AdSpendSource;
+        return $this->MarketingSource;
     }
 
-    public function setAdSpendSource(?AdSpendSource $AdSpendSource): self
+    public function setMarketingSource(?MarketingSource $marketingSource): self
     {
-        $this->AdSpendSource = $AdSpendSource;
+        $this->marketingSource = $marketingSource;
 
         return $this;
     }

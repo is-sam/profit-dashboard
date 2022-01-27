@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\AdSpendSource;
+use App\Entity\MarketingSource;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method AdSpendSource|null find($id, $lockMode = null, $lockVersion = null)
- * @method AdSpendSource|null findOneBy(array $criteria, array $orderBy = null)
- * @method AdSpendSource[]    findAll()
- * @method AdSpendSource[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method MarketingSource|null find($id, $lockMode = null, $lockVersion = null)
+ * @method MarketingSource|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MarketingSource[]    findAll()
+ * @method MarketingSource[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AdSpendSourceRepository extends ServiceEntityRepository
+class MarketingSourceRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, AdSpendSource::class);
+        parent::__construct($registry, MarketingSource::class);
     }
 
     // /**
-    //  * @return AdSpendSource[] Returns an array of AdSpendSource objects
+    //  * @return MarketingSource[] Returns an array of MarketingSource objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class AdSpendSourceRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?AdSpendSource
+    public function findOneBySomeField($value): ?MarketingSource
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')

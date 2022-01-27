@@ -42,9 +42,9 @@ class Shop implements UserInterface
     private $accessToken;
 
     /**
-     * @ORM\OneToMany(targetEntity=AdSpendAccount::class, mappedBy="shop", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=MarketingAccount::class, mappedBy="shop", orphanRemoval=true)
      */
-    private $adSpendAccounts;
+    private $marketingAccounts;
 
     /**
      * @ORM\OneToMany(targetEntity=CustomCost::class, mappedBy="shop")
@@ -55,8 +55,7 @@ class Shop implements UserInterface
     {
         $this->products = new ArrayCollection();
         $this->creationDate = new DateTime();
-        $this->adSpendSources = new ArrayCollection();
-        $this->adSpendAccounts = new ArrayCollection();
+        $this->marketingAccounts = new ArrayCollection();
         $this->customCosts = new ArrayCollection();
     }
 
@@ -147,29 +146,29 @@ class Shop implements UserInterface
     }
 
     /**
-     * @return Collection|AdSpendAccount[]
+     * @return Collection|MarketingAccount[]
      */
-    public function getAdSpendAccounts(): Collection
+    public function getMarketingAccounts(): Collection
     {
-        return $this->adSpendAccounts;
+        return $this->marketingAccounts;
     }
 
-    public function addAdSpendAccount(AdSpendAccount $adSpendAccount): self
+    public function addMarketingAccount(MarketingAccount $marketingAccount): self
     {
-        if (!$this->adSpendAccounts->contains($adSpendAccount)) {
-            $this->adSpendAccounts[] = $adSpendAccount;
-            $adSpendAccount->setShop($this);
+        if (!$this->marketingAccounts->contains($marketingAccount)) {
+            $this->marketingAccounts[] = $marketingAccount;
+            $marketingAccount->setShop($this);
         }
 
         return $this;
     }
 
-    public function removeAdSpendAccount(AdSpendAccount $adSpendAccount): self
+    public function removeMarketingAccount(MarketingAccount $marketingAccount): self
     {
-        if ($this->adSpendAccounts->removeElement($adSpendAccount)) {
+        if ($this->marketingAccounts->removeElement($marketingAccount)) {
             // set the owning side to null (unless already changed)
-            if ($adSpendAccount->getShop() === $this) {
-                $adSpendAccount->setShop(null);
+            if ($marketingAccount->getShop() === $this) {
+                $marketingAccount->setShop(null);
             }
         }
 
