@@ -21,31 +21,32 @@
     </div>
 
     {% if account %}
-    <div>
+    <div class="my-4">
         {# {{ dump(adAccounts) }} #}
-        <table>
+        <table class="min-w-full leading-normal">
             <thead>
-                <tr>
-                    <th>Name</th>
+                <tr class="text-left border-b-2 border-gray-600 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    <th class="px-5 py-3">AD Account</th>
                     <th>ID</th>
                     <th>Active</th>
                 </tr>
             </thead>
             <tbody>
-                <form action="" method="POST">
                 {% for adAccount in adAccounts %}
-                <tr>
-                    <td>{{ adAccount.name }}</td>
+                <tr class="border-b border-gray-600 bg-gray-800 text-sm hover:bg-gray-700 hover:cursor-pointer">
+                    <td class="px-5 py-3">{{ adAccount.name }}</td>
                     <td>{{ adAccount.account_id }}</td>
                     <td>
-                        <input type="radio" name="ad_account" value="{{ adAccount.account_id }}" {% if adAccountId == adAccount.account_id %}checked{% endif %}>
+                        <input type="radio" name="ad_account" class="hover:cursor-pointer" value="{{ adAccount.account_id }}" {% if adAccountId == adAccount.account_id %}checked{% endif %}>
+                        {% if adAccountId == adAccount.account_id %}<label class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-600 bg-indigo-50 rounded-full">ACTIVE</label>{% endif %}
                     </td>
                 </tr>
                 {% endfor %}
-                </form>
             </tbody>
         </table>
-        <button onclick="saveAdAccount()">Save</button>
+        <button onclick="saveAdAccount()" class="mt-4 px-4 py-3 bg-green-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform">
+            Save
+        </button>
     </div>
     {% endif %}
 {% endblock %}
