@@ -19,6 +19,7 @@ dashboard.filter.submit: Filter
 settings.title: Settings
 settings.cogs.title: Product costs
 settings.custom.title: Custom Costs
+settings.shipping.title: Shipping
 
 auth.login.title: Sign In with Shopify
 auth.login.shop_url: Shop URL

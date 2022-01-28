@@ -106,4 +106,17 @@ class SettingsController extends AbstractController
 
         return $this->redirectToRoute('settings_custom');
     }
+
+    #[Route('/settings/shipping', name: 'settings_shipping')]
+    public function shipping(
+        Request $request,
+        Security $security
+    )
+    {
+        $shop = $security->getUser();
+
+        return $this->render('settings/shipping.html.twig', [
+            'profiles'  => []
+        ]);
+    }
 }

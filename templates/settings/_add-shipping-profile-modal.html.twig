@@ -1,37 +1,20 @@
-<div data-modal="add_custom_cost" class="hidden fixed top-0 left-0 w-full h-full flex items-center bg-gray-200/[80] antialiased">
+<div data-modal="add_shipping_profile" class="hidden fixed top-0 left-0 w-full h-full flex items-center bg-gray-200/[80] antialiased">
   <div class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl">
     <div class="flex flex-row justify-between p-6 bg-gray-800 border-b border-gray-200 rounded-tl-lg rounded-tr-lg">
-      <p class="font-semibold text-gray-200">Add a custom cost</p>
-      <button type="button" data-modal-close="add_custom_cost">
+      <p class="font-semibold text-gray-200">Add a shipping profile</p>
+      <button type="button" data-modal-close="add_shipping_profile">
         <i class="fa fa-times"></i>
       </button>
     </div>
     <form action="" method="POST">
     <div class="flex flex-col px-6 py-5 bg-gray-800">
       <p class="mb-2 font-semibold text-gray-200">Name</p>
-      <input type="text" name="name" placeholder="Custom expense name ..."
+      <input type="text" name="name" placeholder="Shipping profile name ..."
         class="p-5 mb-5 bg-gray-700 border border-gray-200 rounded shadow-sm text-gray-200">
 
       <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5">
-        <div class="w-full sm:w-1/2">
-          <p class="mb-2 font-semibold text-gray-200">Start Date</p>
-          <input type="date" name="start_date" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none">
-        </div>
-
         <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
-          <p class="mb-2 font-semibold text-gray-200">End Date</p>
-          <input type="date" name="end_date" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none">
-        </div>
-      </div>
-
-        <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5">
-        <div class="w-full sm:w-1/2">
-          <p class="mb-2 font-semibold text-gray-200">Amount</p>
-          <input type="number" name="amount" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none">
-        </div>
-
-        <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
-          <p class="mb-2 font-semibold text-gray-200">Frequency</p>
+          <p class="mb-2 font-semibold text-gray-200">Countries</p>
           <select name="frequency" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none">
             <option value="onetime">One time</option>
             <option value="daily">Daily</option>
@@ -41,10 +24,16 @@
             <option value="yearly">Yearly</option>
           </select>
         </div>
+
+        <div class="w-full sm:w-1/2">
+          <p class="mb-2 font-semibold text-gray-200">Amount</p>
+          <input type="number" name="amount" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none">
+        </div>
       </div>
     </div>
+
     <div class="flex flex-row items-center justify-between p-5 bg-gray-800 border-t border-gray-200 rounded-bl-lg rounded-br-lg">
-        <button type="button" data-modal-close="add_custom_cost" class="font-semibold text-gray-200">
+        <button type="button" data-modal-close="add_shipping_profile" class="font-semibold text-gray-200">
             Cancel
         </button>
         <button type="submit" class="px-4 py-2 text-white font-semibold bg-blue-500 rounded">
