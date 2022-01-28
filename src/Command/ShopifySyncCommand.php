@@ -2,6 +2,9 @@
 
 namespace App\Command;
 
+use App\Entity\Shop;
+use App\Service\ShopifyAdminAPIService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -9,6 +12,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ShopifySyncCommand extends Command
 {
     protected static $defaultName = 'app:shopify:products:sync';
+    protected ShopifyAdminAPIService $adminAPI;
+    protected EntityManagerInterface $entityManager;
+
+    /**
+     * Class constructor.
+     */
+    public function __construct(ShopifyAdminAPIService $adminAPI, EntityManagerInterface $entityManager)
+    {
+        parent::__construct();
+        $this->adminAPI = $adminAPI;
+        $this->entityManager = $entityManager;
+    }
 
     protected function configure()
     {
@@ -17,27 +32,19 @@ class ShopifySyncCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $products = $this->adminAPI->getProducts();
+        $output->writeln("Sync Products Command !");
 
-        $variants = array_column($products, 'variants');
+        $shops = $this->entityManager->getRepository(Shop::class)
+            ->findAll();
 
-        // extract invetory items ids from product variants
-        $inventoryItemsIds = array_map(
-            fn ($variant) => array_column($variant, 'inventory_item_id'),
-            $variants
-        );
-        $inventoryItemsIds = array_merge(...$inventoryItemsIds);
+        $shopsCount = count($shops);
 
-        $inventoryItems = $this->adminAPI->getInventoryItems($inventoryItemsIds);
+        $output->writeln("Found $shopsCount shops");
 
-        // set id as key
-        $inventoryItems = array_combine(array_column($inventoryItems, 'id'), $inventoryItems);
-
-        // add inventory items to product variants
-        foreach ($products as &$product) {
-            foreach ($product['variants'] as &$variant) {
-                $variant['inventory_item'] = $inventoryItems[$variant['inventory_item_id']];
-            }
+        foreach ($shops as $shop) {
+            $output->writeln("Shop: {$shop->getUrl()}");
+            $this->adminAPI->setShop($shop);
+            $this->adminAPI->syncProducts();
         }
 
         return Command::SUCCESS;

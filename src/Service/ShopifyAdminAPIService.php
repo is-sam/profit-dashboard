@@ -3,50 +3,45 @@
 namespace App\Service;
 
 use App\Entity\Product;
-use App\Entity\Shop;
 use App\Entity\Variant;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Shopify\Clients\Rest;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Class ShopifyAdminAPIService.
  */
-class ShopifyAdminAPIService
+class ShopifyAdminAPIService extends AbstractService
 {
+    public const ORDERS = 'orders';
     public const ORDERS_TOTAL_PRICE = 'total_price';
     public const ORDERS_FINANCIAL_STATUS = 'financial_status';
+    public const LINE_ITEMS = 'line_items';
+    public const LINE_ITEMS_NAME = 'name';
 
-    protected EntityManagerInterface $entityManager;
+    public const PRODUCTS = 'products';
+    public const PRODUCTS_ID = 'id';
+    public const PRODUCTS_TITLE = 'title';
+    public const PRODUCTS_HANDLE = 'handle';
 
-    protected Shop $shop;
-    protected Rest $client;
+    public const VARIANTS = 'variants';
+    public const VARIANTS_ID = 'id';
+    public const VARIANTS_TITLE = 'title';
+    public const VARIANTS_COST = 'cost';
+    public const VARIANTS_INVENTORY_ITEM_ID = 'inventory_item_id';
 
-    /**
-     * Class constructor.
-     */
-    public function __construct(EntityManagerInterface $entityManager, Security $security)
-    {
-        $this->entityManager = $entityManager;
-        $this->shop = $security->getUser();
-        $this->client = new Rest($this->shop->getUrl(), $this->shop->getAccessToken());
-    }
+    public const INVENTORY_ITEMS = 'inventory_items';
+    public const INVENTORY_ITEM = 'inventory_item';
+    public const INVENTORY_ITEMS_ID = 'id';
+    public const INVENTORY_ITEMS_COST = 'cost';
+
+    protected ?Rest $client = null;
 
     protected function getClient()
     {
-        // check access token & scopes
-        // $response = $this->client
-        //     ->get("products/count")
-        //     ->getDecodedBody();
-
-        // if (array_key_exists('errors', $response)) {
-        //     if ($response['errors'] === '[API] Invalid API key or access token (unrecognized login or wrong password)') {
-        //         throw new ShopifySessionDataEmptyException();
-        //     }
-        //     throw new Exception("Error fetching /admin/oauth/access_scopes.json: {$response['errors']}");
-        // }
+        if ($this->client === null) {
+            $this->client = new Rest($this->shop->getUrl(), $this->shop->getAccessToken());
+        }
 
         return $this->client;
     }
@@ -55,27 +50,34 @@ class ShopifyAdminAPIService
     {
         $client = $this->getClient();
 
+
         $fields = [
             self::ORDERS_TOTAL_PRICE,
             self::ORDERS_FINANCIAL_STATUS,
-            'line_items'
+            self::LINE_ITEMS
         ];
 
         $params = [
-            'created_at_min' => $dateStart->format('c'),
-            'created_at_max' => $dateEnd->format('c'),
             'status'         => 'any',
             'fields'         => implode(',', $fields)
         ];
 
-        $response = $client->get("orders", [], $params)
+        if ($dateStart) {
+            $params['created_at_min'] = $dateStart->format('c');
+        }
+
+        if ($dateEnd) {
+            $params['created_at_max'] = $dateEnd->format('c');
+        }
+
+        $response = $client->get(self::ORDERS, [], $params)
             ->getDecodedBody();
 
         if (array_key_exists('errors', $response)) {
             throw new Exception("getOrders: {$response['errors']}");
         }
 
-        $orders = $response['orders'];
+        $orders = $response[self::ORDERS];
 
         return $orders;
     }
@@ -86,24 +88,24 @@ class ShopifyAdminAPIService
 
         // get products
         $fields = [
-            'id',
-            'title',
-            'handle',
-            'variants'
+            self::PRODUCTS_ID,
+            self::PRODUCTS_TITLE,
+            self::PRODUCTS_HANDLE,
+            self::VARIANTS
         ];
 
         $params = [
             'fields'         => implode(',', $fields)
         ];
 
-        $response = $client->get("products", [], $params)
+        $response = $client->get(self::PRODUCTS, [], $params)
             ->getDecodedBody();
 
         if (array_key_exists('errors', $response)) {
-            throw new Exception("key 'products' not found in getProducts() response");
+            throw new Exception("getProducts: {$response['errors']}");
         }
 
-        $products = $response['products'];
+        $products = $response[self::PRODUCTS];
         // dd($products);
 
         return $products;
@@ -115,8 +117,8 @@ class ShopifyAdminAPIService
 
         // get inventory items by ids
         $fields = [
-            'id',
-            'cost'
+            self::INVENTORY_ITEMS_ID,
+            self::INVENTORY_ITEMS_COST
         ];
 
         $params = [
@@ -124,14 +126,14 @@ class ShopifyAdminAPIService
             'fields'    => implode(',', $fields)
         ];
 
-        $response = $client->get('inventory_items', [], $params)
+        $response = $client->get(self::INVENTORY_ITEMS, [], $params)
             ->getDecodedBody();
 
         if (array_key_exists('errors', $response)) {
-            throw new Exception("key 'inventory_items' not found in getInventoryItems() response");
+            throw new Exception("getInventoryItems: {$response['errors']}");
         }
 
-        return $response['inventory_items'];
+        return $response[self::INVENTORY_ITEMS];
     }
 
     public function getInventoryItem(int $id): array
@@ -140,22 +142,22 @@ class ShopifyAdminAPIService
 
         // get inventory items by ids
         $fields = [
-            'id',
-            'cost'
+            self::INVENTORY_ITEMS_ID,
+            self::INVENTORY_ITEMS_COST
         ];
 
         $params = [
             'fields'    => implode(',', $fields)
         ];
 
-        $response = $client->get("inventory_items/$id", [], $params)
+        $response = $client->get(self::INVENTORY_ITEMS."/$id", [], $params)
             ->getDecodedBody();
 
         if (array_key_exists('errors', $response)) {
-            throw new Exception("key 'inventory_item' not found in getInventoryItem() response");
+            throw new Exception("getInventoryItem: {$response['errors']}");
         }
 
-        return $response['inventory_item'];
+        return $response[self::INVENTORY_ITEM];
     }
 
     public function syncProducts()
@@ -165,42 +167,42 @@ class ShopifyAdminAPIService
         foreach ($shopifyProducts as $shopifyProduct) {
             /** @var Product $product */
             $product = $this->entityManager->getRepository(Product::class)
-                ->findOneBy(['identifier' => $shopifyProduct['id']]);
+                ->findOneBy(['identifier' => $shopifyProduct[self::PRODUCTS_ID]]);
 
             if (empty($product)) {
                 $product = new Product();
                 $product->setShop($this->shop);
-                $product->setIdentifier($shopifyProduct['id']);
+                $product->setIdentifier($shopifyProduct[self::PRODUCTS_ID]);
                 $this->entityManager->persist($product);
             }
 
-            if ($product->getIdentifier() != $shopifyProduct['id']) {
+            if ($product->getIdentifier() != $shopifyProduct[self::PRODUCTS_ID]) {
                 throw new Exception("Product identifier mismatch for Product:{$product->getId()}");
             }
 
-            $product->setTitle($shopifyProduct['title']);
-            $product->setHandle($shopifyProduct['handle']);
+            $product->setTitle($shopifyProduct[self::PRODUCTS_TITLE]);
+            $product->setHandle($shopifyProduct[self::PRODUCTS_HANDLE]);
 
-            foreach ($shopifyProduct['variants'] as $shopifyVariant) {
+            foreach ($shopifyProduct[self::VARIANTS] as $shopifyVariant) {
                 /** @var Variant $variant */
                 $variant = $this->entityManager->getRepository(Variant::class)
-                    ->findOneBy(['identifier' => $shopifyVariant['id']]);
-                $inventoryItem = $this->getInventoryItem($shopifyVariant['inventory_item_id']);
+                    ->findOneBy(['identifier' => $shopifyVariant[self::VARIANTS_ID]]);
+                $inventoryItem = $this->getInventoryItem($shopifyVariant[self::VARIANTS_INVENTORY_ITEM_ID]);
 
                 if (empty($variant)) {
                     $variant = new Variant();
                     $variant->setProduct($product);
-                    $variant->setIdentifier($shopifyVariant['id']);
+                    $variant->setIdentifier($shopifyVariant[self::VARIANTS_ID]);
                     $this->entityManager->persist($variant);
                 }
 
-                if ($variant->getIdentifier() != $shopifyVariant['id']) {
+                if ($variant->getIdentifier() != $shopifyVariant[self::VARIANTS_ID]) {
                     throw new Exception("Product variant identifier mismatch for Variant:{$variant->getId()}");
                 }
 
-                $variant->setTitle($shopifyVariant['title']);
+                $variant->setTitle($shopifyVariant[self::VARIANTS_TITLE]);
                 if ($variant->getCost() === null) {
-                    $variant->setCost($inventoryItem['cost']);
+                    $variant->setCost($inventoryItem[self::VARIANTS_COST]);
                 }
             }
         }
@@ -212,7 +214,7 @@ class ShopifyAdminAPIService
 
     public function getOrphanVariants()
     {
-        $orders = $this->getOrders(new DateTime('01-01-1970'), new DateTime('now'));
+        $orders = $this->getOrders();
 
         /** @var Product $placeholderProduct */
         $placeholderProduct = $this->entityManager->getRepository(Product::class)
@@ -231,13 +233,13 @@ class ShopifyAdminAPIService
         $variants = array_map(fn (Variant $variant) => $variant->getTitle(), iterator_to_array($variants));
 
         foreach ($orders as $order) {
-            foreach ($order['line_items'] as $lineItem) {
+            foreach ($order[self::LINE_ITEMS] as $lineItem) {
                 if ($lineItem['product_exists'] === false) {
 
-                    if (!in_array($lineItem['name'], $variants)) {
+                    if (!in_array($lineItem[self::LINE_ITEMS_NAME], $variants)) {
                         $variant = (new Variant())
                             ->setProduct($placeholderProduct)
-                            ->setTitle($lineItem['name']);
+                            ->setTitle($lineItem[self::LINE_ITEMS_NAME]);
 
                         $this->entityManager->persist($placeholderProduct);
                         $this->entityManager->persist($variant);

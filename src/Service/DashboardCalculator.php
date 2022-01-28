@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\CustomCost;
 use App\Entity\Variant;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -27,7 +26,8 @@ class DashboardCalculator
     public function calculateData(array $orders, array $variants, float $fbAdSpend, float $customCosts) : array
     {
         $ordersCount = $this->getOrdersCount($orders);
-        $totalRevenue = $this->getTotalRevenue($orders);
+        $totalRefunds = $this->getTotalRefundValue($orders);
+        $totalRevenue = $this->getTotalRevenue($orders, $totalRefunds);
         $aov = $this->getAOV($ordersCount, $totalRevenue);
         $cogs = $this->getCostOfGoods($orders, $variants);
         $margin = $totalRevenue - $cogs;
@@ -41,6 +41,7 @@ class DashboardCalculator
         return [
             'orders'    => $ordersCount,
             'revenue'   => $totalRevenue,
+            'refunds'   => $totalRefunds,
             'aov'       => $aov,
             'cogs'      => $cogs,
             'margin'    => $margin,
@@ -85,7 +86,7 @@ class DashboardCalculator
         return $globalCost;
     }
 
-    public function getDayCost(CustomCost $customCost)
+    private function getDayCost(CustomCost $customCost)
     {
         $dateDiff = $customCost->getStartDate()->diff($customCost->getEndDate() ?? new DateTime());
 
@@ -113,9 +114,8 @@ class DashboardCalculator
         return count($orders);
     }
 
-    protected function getTotalRevenue(array $orders): float
+    protected function getTotalRevenue(array $orders, float $totalRefunds): float
     {
-        $totalRefunds = $this->getTotalRefundValue($orders);
         return array_sum(array_column($orders, ShopifyAdminAPIService::ORDERS_TOTAL_PRICE)) - $totalRefunds;
     }
 

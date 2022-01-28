@@ -40,6 +40,7 @@
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.profit" | trans, value: data.profit, type: 'money'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.profit_rate" | trans, value: data.profit_rate, type: 'rate'} %}
         {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.custom_cost" | trans, value: data.custom_cost, type: 'money'} %}
+        {% include "components/dashboard-item.html.twig" with {title: "dashboard.indicators.refunds" | trans, value: data.refunds, type: 'money'} %}
     </div>
 
 {% endblock %}

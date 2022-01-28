@@ -2,8 +2,9 @@
 
 namespace App\EventSubscriber;
 
-use Shopify\Auth\FileSessionStorage;
 use Shopify\Context;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -27,13 +28,23 @@ class ShopifyContextSubscriber implements EventSubscriberInterface
 
     public function onKernelController(ControllerEvent $event)
     {
+        $this->initShopifyAPI();
+    }
+
+    public function onConsoleCommand(ConsoleCommandEvent $event)
+    {
+        $this->initShopifyAPI();
+    }
+
+    public function initShopifyAPI()
+    {
         Context::initialize(
             $this->parameterBagInterface->get('shopify.api.key'),
             $this->parameterBagInterface->get('shopify.api.secret'),
             $this->parameterBagInterface->get('shopify.app.scopes'),
             $this->parameterBagInterface->get('shopify.app.hostname'),
             $this->shopifySessionStorage,
-            '2021-10',
+            $this->parameterBagInterface->get('shopify.api.version'),
             true,
             false,
         );
@@ -42,7 +53,8 @@ class ShopifyContextSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::CONTROLLER => 'onKernelController',
+            KernelEvents::CONTROLLER    => 'onKernelController',
+            ConsoleEvents::COMMAND      => 'onConsoleCommand'
         ];
     }
 }

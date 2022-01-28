@@ -12,6 +12,7 @@ dashboard.indicators.margin_rate: Margin %
 dashboard.indicators.totaladspend: Total Ad Spend
 dashboard.indicators.roas: Global ROAS
 dashboard.indicators.custom_cost: Custom Costs
+dashboard.indicators.refunds: Refunds
 dashboard.filter.datestart: Date Start
 dashboard.filter.dateend: Date End
 dashboard.filter.submit: Filter

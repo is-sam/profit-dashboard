@@ -3,29 +3,13 @@
 namespace App\Service;
 
 use App\Entity\CustomCost;
-use App\Entity\Shop;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Class SettingsService.
  */
-class SettingsService
+class SettingsService extends AbstractService
 {
-    protected Shop $shop;
-    protected EntityManagerInterface $entityManager;
-
-    /**
-     * Class constructor.
-     */
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        Security $security,
-    ) {
-        $this->entityManager = $entityManager;
-        $this->shop = $security->getUser();
-    }
 
     public function saveCustomCost($data)
     {

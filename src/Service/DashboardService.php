@@ -3,23 +3,19 @@
 namespace App\Service;
 
 use App\Entity\CustomCost;
-use App\Entity\Shop;
 use App\Entity\Variant;
 use App\Repository\VariantRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 /**
  * Class DashboardService.
  */
-class DashboardService
+class DashboardService extends AbstractService
 {
-    protected Shop $shop;
     protected DashboardCalculator $dashboardCalculator;
     protected ShopifyAdminAPIService $adminAPI;
     protected FacebookAPIService $facebookAPI;
-    protected EntityManager $entityManager;
 
     /**
      * Class constructor.
@@ -31,11 +27,10 @@ class DashboardService
         EntityManagerInterface $entityManager,
         Security $security,
     ) {
+        parent::__construct($entityManager, $security);
         $this->dashboardCalculator = $dashboardCalculator;
         $this->adminAPI = $adminAPI;
         $this->facebookAPI = $facebookAPI;
-        $this->entityManager = $entityManager;
-        $this->shop = $security->getUser();
     }
 
     public function getData($dateStart, $dateEnd)
