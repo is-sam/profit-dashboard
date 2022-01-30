@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class DefaultController.
+ * Class DashboardController.
  */
-class DefaultController extends AbstractController
+class DashboardController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(
+    public function home(
         Request $request,
         DashboardService $dashboardService,
     ) {
