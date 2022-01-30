@@ -59,7 +59,7 @@ class MarketingController extends AbstractController
             $adAccounts = $response['data'];
         }
 
-        return $this->render('marketing/index.html.twig', [
+        return $this->render("marketing/{$marketingSource->getSlug()}.html.twig", [
             'source' => $marketingSource,
             'account' => $marketingAccount,
             'adAccounts' => $adAccounts,
@@ -67,15 +67,16 @@ class MarketingController extends AbstractController
         ]);
     }
 
-    #[Route('/marketing/facebook-ads/set-data', name: 'marketing_fb_set_data', methods: ['POST'])]
+    #[Route('/marketing/{slug}/set-data', name: 'marketing_set_data', methods: ['POST'])]
     public function fbAdAccounts(
+        string $slug,
         Request $request,
         Security $security,
         MarketingSourceRepository $marketingSourceRepository,
         MarketingAccountRepository $marketingAccountRepository
     ): Response {
         $shop = $security->getUser();
-        $marketingSource = $marketingSourceRepository->findOneBy(['slug' => 'facebook-ads']);
+        $marketingSource = $marketingSourceRepository->findOneBy(['slug' => $slug]);
         if (empty($marketingSource)) {
             throw $this->createNotFoundException('Marketing source not found !');
         }

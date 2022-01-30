@@ -38,7 +38,9 @@
                     <td>{{ adAccount.account_id }}</td>
                     <td>
                         <input type="radio" name="ad_account" class="hover:cursor-pointer" value="{{ adAccount.account_id }}" {% if adAccountId == adAccount.account_id %}checked{% endif %}>
-                        {% if adAccountId == adAccount.account_id %}<label class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-600 bg-indigo-50 rounded-full">ACTIVE</label>{% endif %}
+                        {% if adAccountId == adAccount.account_id %}
+                            <label class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-600 bg-indigo-50 rounded-full">ACTIVE</label>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
