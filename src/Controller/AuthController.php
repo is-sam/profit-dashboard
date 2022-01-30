@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Shop;
 use App\Form\Type\ShopifyLoginType;
+use App\Service\ShopifyAdminAPIService;
 use Doctrine\ORM\EntityManagerInterface;
 use Shopify\Auth\OAuth;
 use Shopify\Clients\Http;
@@ -47,12 +48,13 @@ class AuthController extends AbstractController
     public function callback(
         Request $request,
         EntityManagerInterface $entityManager,
-        Security $security
+        Security $security,
+        ShopifyAdminAPIService $adminAPI
     ) {
         /** @var Shop $shop */
         $shop = $security->getUser();
 
-        if (null === $shop->getAccessToken()) {
+        if (null === $shop->getAccessToken() or !$adminAPI->isTokenValid()) {
             $http = new Http($shop->getUrl());
             $response = $http->post('/admin/oauth/access_token', [
                 'client_id' => $this->getParameter('shopify.api.key'),

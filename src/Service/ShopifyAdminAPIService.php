@@ -46,6 +46,19 @@ class ShopifyAdminAPIService extends AbstractService
         return $this->client;
     }
 
+    public function isTokenValid()
+    {
+        $client = $this->getClient();
+
+        $response = $client->get('products/count')->getDecodedBody();
+
+        if (array_key_exists('errors', $response)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function getOrders(DateTime $dateStart = null, DateTime $dateEnd = null): array
     {
         $client = $this->getClient();
