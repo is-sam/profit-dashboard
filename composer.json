@@ -60,6 +60,8 @@
     },
     "scripts": {
         "ngrok": "ngrok http 127.0.0.1:8000 -host-header='127.0.0.1:8000'",
+        "lt": "lt -s profitdashboard -p 8000",
+        "csfixer": "./vendor/bin/php-cs-fixer fix src -q -n",
         "server": {
             "symfony": "symfony serve -d",
             "lt": "lt -s profitdashboard -p 8000"
