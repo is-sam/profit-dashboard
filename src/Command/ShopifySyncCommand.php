@@ -27,12 +27,11 @@ class ShopifySyncCommand extends Command
 
     protected function configure()
     {
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln("Sync Products Command !");
+        $output->writeln('Sync Products Command !');
 
         $shops = $this->entityManager->getRepository(Shop::class)
             ->findAll();

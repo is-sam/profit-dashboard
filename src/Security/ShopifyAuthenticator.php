@@ -56,6 +56,6 @@ class ShopifyAuthenticator extends AbstractAuthenticator implements Authenticati
 
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
-         return new RedirectResponse('/auth/login');
+        return new RedirectResponse('/auth/login');
     }
 }

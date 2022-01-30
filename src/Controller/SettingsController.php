@@ -12,8 +12,6 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -27,8 +25,7 @@ class SettingsController extends AbstractController
         Request $request,
         ProductRepository $productRepository,
         ShopifyAdminAPIService $adminAPI
-    )
-    {
+    ) {
         $shop = $this->getUser();
 
         if ($request->isMethod('POST')) {
@@ -38,7 +35,7 @@ class SettingsController extends AbstractController
         $products = $productRepository->getProductsWithVariantsByShop($shop);
 
         return $this->render('settings/cogs.html.twig', [
-            'products'  => $products
+            'products' => $products,
         ]);
     }
 
@@ -61,7 +58,7 @@ class SettingsController extends AbstractController
 
         return new JsonResponse([
             'success' => true,
-            'message' => 'Cost updated'
+            'message' => 'Cost updated',
         ]);
     }
 
@@ -71,19 +68,18 @@ class SettingsController extends AbstractController
         SettingsService $settingsService,
         CustomCostRepository $customCostRepository,
         Security $security
-    )
-    {
+    ) {
         if ($request->isMethod('POST')) {
             $settingsService->saveCustomCost($request->request->all());
         }
 
         $shop = $security->getUser();
         $costs = $customCostRepository->findBy([
-            'shop' => $shop
+            'shop' => $shop,
         ]);
 
         return $this->render('settings/custom.html.twig', [
-            'costs' => $costs
+            'costs' => $costs,
         ]);
     }
 
@@ -94,8 +90,7 @@ class SettingsController extends AbstractController
         SettingsService $settingsService,
         CustomCostRepository $customCostRepository,
         Security $security
-    )
-    {
+    ) {
         $customCost = $customCostRepository->find($id);
 
         if (empty($customCost)) {
@@ -111,12 +106,11 @@ class SettingsController extends AbstractController
     public function shipping(
         Request $request,
         Security $security
-    )
-    {
+    ) {
         $shop = $security->getUser();
 
         return $this->render('settings/shipping.html.twig', [
-            'profiles'  => []
+            'profiles' => [],
         ]);
     }
 }

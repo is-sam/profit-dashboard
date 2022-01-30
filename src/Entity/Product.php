@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
-    const STATUS_ACTIVE = 'active';
-    const STATUS_DELETED = 'deleted';
-    const STATUS_PLACEHOLDER = 'placeholder';
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_DELETED = 'deleted';
+    public const STATUS_PLACEHOLDER = 'placeholder';
 
     /**
      * @ORM\Id

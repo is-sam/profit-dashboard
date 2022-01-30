@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * ShopifyAuthHelper
+ * ShopifyAuthHelper.
  */
 class ShopifyAuthHelper
 {
@@ -22,16 +22,16 @@ class ShopifyAuthHelper
     }
 
     /**
-     * Validate params returned by Shopify with HMAC
+     * Validate params returned by Shopify with HMAC.
      *
      * @throws AuthenticationException
-     * @param array $params
+     *
      * @return void
      */
     public function validateParams(array $params)
     {
         if (!array_key_exists('hmac', $params)) {
-            throw new AuthenticationException("no HMAC provided");
+            throw new AuthenticationException('no HMAC provided');
         }
 
         $hmac = $params['hmac'];
@@ -39,9 +39,8 @@ class ShopifyAuthHelper
 
         $hash = hash_hmac('sha256', http_build_query($params), $this->key);
         if ($hmac !== $hash) {
-            throw new AuthenticationException("HMAC not valid");
+            throw new AuthenticationException('HMAC not valid');
         }
-        dump("valid params");
     }
 
     public function createShopIfNotExists(string $url)
@@ -50,7 +49,6 @@ class ShopifyAuthHelper
         $shop = $this->entityManager->getRepository(Shop::class)->findOneBy(['url' => $url]);
 
         if (empty($shop)) {
-            dump("create new shop");
             $shop = new Shop();
             $shop->setUrl($url);
             $this->entityManager->persist($shop);

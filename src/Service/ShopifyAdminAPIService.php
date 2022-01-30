@@ -39,7 +39,7 @@ class ShopifyAdminAPIService extends AbstractService
 
     protected function getClient()
     {
-        if ($this->client === null) {
+        if (null === $this->client) {
             $this->client = new Rest($this->shop->getUrl(), $this->shop->getAccessToken());
         }
 
@@ -50,16 +50,15 @@ class ShopifyAdminAPIService extends AbstractService
     {
         $client = $this->getClient();
 
-
         $fields = [
             self::ORDERS_TOTAL_PRICE,
             self::ORDERS_FINANCIAL_STATUS,
-            self::LINE_ITEMS
+            self::LINE_ITEMS,
         ];
 
         $params = [
-            'status'         => 'any',
-            'fields'         => implode(',', $fields)
+            'status' => 'any',
+            'fields' => implode(',', $fields),
         ];
 
         if ($dateStart) {
@@ -91,11 +90,11 @@ class ShopifyAdminAPIService extends AbstractService
             self::PRODUCTS_ID,
             self::PRODUCTS_TITLE,
             self::PRODUCTS_HANDLE,
-            self::VARIANTS
+            self::VARIANTS,
         ];
 
         $params = [
-            'fields'         => implode(',', $fields)
+            'fields' => implode(',', $fields),
         ];
 
         $response = $client->get(self::PRODUCTS, [], $params)
@@ -118,12 +117,12 @@ class ShopifyAdminAPIService extends AbstractService
         // get inventory items by ids
         $fields = [
             self::INVENTORY_ITEMS_ID,
-            self::INVENTORY_ITEMS_COST
+            self::INVENTORY_ITEMS_COST,
         ];
 
         $params = [
-            'ids'       => implode(',', $ids),
-            'fields'    => implode(',', $fields)
+            'ids' => implode(',', $ids),
+            'fields' => implode(',', $fields),
         ];
 
         $response = $client->get(self::INVENTORY_ITEMS, [], $params)
@@ -143,11 +142,11 @@ class ShopifyAdminAPIService extends AbstractService
         // get inventory items by ids
         $fields = [
             self::INVENTORY_ITEMS_ID,
-            self::INVENTORY_ITEMS_COST
+            self::INVENTORY_ITEMS_COST,
         ];
 
         $params = [
-            'fields'    => implode(',', $fields)
+            'fields' => implode(',', $fields),
         ];
 
         $response = $client->get(self::INVENTORY_ITEMS."/$id", [], $params)
@@ -201,7 +200,7 @@ class ShopifyAdminAPIService extends AbstractService
                 }
 
                 $variant->setTitle($shopifyVariant[self::VARIANTS_TITLE]);
-                if ($variant->getCost() === null) {
+                if (null === $variant->getCost()) {
                     $variant->setCost($inventoryItem[self::VARIANTS_COST]);
                 }
             }
@@ -219,8 +218,8 @@ class ShopifyAdminAPIService extends AbstractService
         /** @var Product $placeholderProduct */
         $placeholderProduct = $this->entityManager->getRepository(Product::class)
             ->findOneBy([
-                'shop'      => $this->shop,
-                'status'    => Product::STATUS_PLACEHOLDER
+                'shop' => $this->shop,
+                'status' => Product::STATUS_PLACEHOLDER,
             ]);
 
         if (empty($placeholderProduct)) {
@@ -234,8 +233,7 @@ class ShopifyAdminAPIService extends AbstractService
 
         foreach ($orders as $order) {
             foreach ($order[self::LINE_ITEMS] as $lineItem) {
-                if ($lineItem['product_exists'] === false) {
-
+                if (false === $lineItem['product_exists']) {
                     if (!in_array($lineItem[self::LINE_ITEMS_NAME], $variants)) {
                         $variant = (new Variant())
                             ->setProduct($placeholderProduct)

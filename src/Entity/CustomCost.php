@@ -10,12 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CustomCost
 {
-    const FREQUENCY_ONETIME = 'onetime';
-    const FREQUENCY_DAILY = 'daily';
-    const FREQUENCY_WEEKLY = 'weekly';
-    const FREQUENCY_MONTHLY = 'monthly';
-    const FREQUENCY_QUARTERLY = 'quarterly';
-    const FREQUENCY_YEARLY = 'yearly';
+    public const FREQUENCY_ONETIME = 'onetime';
+    public const FREQUENCY_DAILY = 'daily';
+    public const FREQUENCY_WEEKLY = 'weekly';
+    public const FREQUENCY_MONTHLY = 'monthly';
+    public const FREQUENCY_QUARTERLY = 'quarterly';
+    public const FREQUENCY_YEARLY = 'yearly';
 
     /**
      * @ORM\Id

@@ -23,7 +23,7 @@ class DashboardCalculator
         $this->logger = $logger;
     }
 
-    public function calculateData(array $orders, array $variants, float $fbAdSpend, float $customCosts) : array
+    public function calculateData(array $orders, array $variants, float $fbAdSpend, float $customCosts): array
     {
         $ordersCount = $this->getOrdersCount($orders);
         $totalRefunds = $this->getTotalRefundValue($orders);
@@ -39,35 +39,32 @@ class DashboardCalculator
         $profitRate = $totalRevenue ? $profit / $totalRevenue : 0;
 
         return [
-            'orders'    => $ordersCount,
-            'revenue'   => $totalRevenue,
-            'refunds'   => $totalRefunds,
-            'aov'       => $aov,
-            'cogs'      => $cogs,
-            'margin'    => $margin,
+            'orders' => $ordersCount,
+            'revenue' => $totalRevenue,
+            'refunds' => $totalRefunds,
+            'aov' => $aov,
+            'cogs' => $cogs,
+            'margin' => $margin,
             'margin_rate' => $marginRate,
             'totalAdSpend' => $totalAdSpend,
             'fbAdSpend' => $fbAdSpend,
-            'cpa'       => $cpa,
-            'roas'      => $roas,
-            'profit'    => $profit,
+            'cpa' => $cpa,
+            'roas' => $roas,
+            'profit' => $profit,
             'profit_rate' => $profitRate,
-            'custom_cost' => $customCosts
+            'custom_cost' => $customCosts,
         ];
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @param CustomCost[] $customCosts
-     * @param DateTime $startDate
-     * @param DateTime $endDate
-     * @return float
      */
     public function calculateCustomCosts(array $customCosts, DateTime $startDate, DateTime $endDate): float
     {
         $globalCost = 0;
-        foreach($customCosts as $customCost) {
+        foreach ($customCosts as $customCost) {
             $intersectionStart = max($startDate, $customCost->getStartDate());
             $intersectionEnd = $customCost->getEndDate() ? min($endDate, $customCost->getEndDate()) : $endDate;
             // dd($endDate, $customCost->getEndDate());
@@ -91,12 +88,12 @@ class DashboardCalculator
         $dateDiff = $customCost->getStartDate()->diff($customCost->getEndDate() ?? new DateTime());
 
         $frequencyToDayRatio = [
-            CustomCost::FREQUENCY_DAILY     => 1,
-            CustomCost::FREQUENCY_WEEKLY    => 7,
-            CustomCost::FREQUENCY_MONTHLY   => 30,
+            CustomCost::FREQUENCY_DAILY => 1,
+            CustomCost::FREQUENCY_WEEKLY => 7,
+            CustomCost::FREQUENCY_MONTHLY => 30,
             CustomCost::FREQUENCY_QUARTERLY => 91,
-            CustomCost::FREQUENCY_YEARLY    => 365,
-            CustomCost::FREQUENCY_ONETIME   => $dateDiff->days + 1
+            CustomCost::FREQUENCY_YEARLY => 365,
+            CustomCost::FREQUENCY_ONETIME => $dateDiff->days + 1,
         ];
 
         return $customCost->getAmount() / $frequencyToDayRatio[$customCost->getFrequency()];
@@ -104,7 +101,7 @@ class DashboardCalculator
 
     protected function getTotalRefundValue(array $orders): float
     {
-        $refundedOrders = array_filter($orders, fn ($order) => ($order[ShopifyAdminAPIService::ORDERS_TOTAL_PRICE] == 'refunded'));
+        $refundedOrders = array_filter($orders, fn ($order) => ('refunded' == $order[ShopifyAdminAPIService::ORDERS_TOTAL_PRICE]));
 
         return array_sum(array_column($refundedOrders, ShopifyAdminAPIService::ORDERS_TOTAL_PRICE));
     }
@@ -142,13 +139,13 @@ class DashboardCalculator
                 $variantId = $lineItem['variant_id'];
                 $quantity = $lineItem['quantity'];
 
-                if ($variantId === null) {
+                if (null === $variantId) {
                     $cost = $this->getVariantCostByName($lineItem['name'], $variants);
                 } else {
                     $cost = $this->getVariantCostById($variantId, $variants);
                 }
 
-                if ($cost !== null) {
+                if (null !== $cost) {
                     $cogs += $cost * $quantity;
                 }
             }
@@ -158,11 +155,9 @@ class DashboardCalculator
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
-     * @param string $variantId
      * @param array<Variant> $variants
-     * @return float
      */
     protected function getVariantCostById(string $variantId, array $variants): float
     {
@@ -171,6 +166,7 @@ class DashboardCalculator
 
         if (empty($variant)) {
             $this->logger->warning("Variant with id $variantId not found");
+
             return (float) 0;
         }
 
@@ -178,11 +174,10 @@ class DashboardCalculator
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
-     * @param string $variantId
+     * @param string         $variantId
      * @param array<Variant> $variants
-     * @return float
      */
     protected function getVariantCostByName(string $name, array $variants): float
     {
@@ -191,6 +186,7 @@ class DashboardCalculator
 
         if (empty($variant)) {
             $this->logger->warning("Variant with title $name not found");
+
             return (float) 0;
         }
 

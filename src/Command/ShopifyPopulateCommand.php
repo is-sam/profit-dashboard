@@ -25,33 +25,33 @@ class ShopifyPopulateCommand extends Command
 
     protected function configure()
     {
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $client = new Rest("issam-dev-store.myshopify.com", "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");
+        $client = new Rest('issam-dev-store.myshopify.com', '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');
         $variants = $this->variantRepository->findAll();
 
         if (empty($variants)) {
-            $output->write("No product variants found !");
+            $output->write('No product variants found !');
+
             return Command::FAILURE;
         }
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $lineItems = [];
-            for ($j = 0; $j < rand(1, 3); $j++) {
+            for ($j = 0; $j < rand(1, 3); ++$j) {
                 $variant = $variants[rand(0, count($variants) - 1)];
                 $lineItems[] = [
                     'variant_id' => $variant->getIdentifier(),
-                    'quantity'   => rand(1, 3)
+                    'quantity' => rand(1, 3),
                 ];
             }
 
-            $response = $client->post("orders",[
-                "order" => [
-                    "line_items" => $lineItems
-                ]
+            $response = $client->post('orders', [
+                'order' => [
+                    'line_items' => $lineItems,
+                ],
             ]);
             dump($response->getDecodedBody());
             sleep(.5);

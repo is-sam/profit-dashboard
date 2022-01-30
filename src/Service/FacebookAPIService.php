@@ -25,14 +25,14 @@ class FacebookAPIService extends AbstractService
         $account = new AdAccount("act_$adAccountId");
 
         $fields = [
-            self::FIELD_SPEND
+            self::FIELD_SPEND,
         ];
 
         $params = [
             'time_range' => [
                 'since' => $dateStart->format('Y-m-d'),
-                'until' => $dateEnd->format('Y-m-d')
-            ]
+                'until' => $dateEnd->format('Y-m-d'),
+            ],
         ];
 
         $response = $account->getInsights($fields, $params)
@@ -60,7 +60,7 @@ class FacebookAPIService extends AbstractService
             $adAccountId = $data['account_id'] ?? null;
         }
 
-        if ($adAccountId === null) {
+        if (null === $adAccountId) {
             // throw new Exception("Facebook Account not linked");
         }
 

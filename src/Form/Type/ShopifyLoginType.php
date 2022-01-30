@@ -15,15 +15,15 @@ class ShopifyLoginType extends AbstractType
         $builder
             ->add('shop', TextType::class, [
                 'label' => 'auth.login.shop_url',
-                'attr'  => [
-                    'class' => 'block w-full my-2 py-2 border-2 rounded-md bg-gray-800'
-                ]
+                'attr' => [
+                    'class' => 'block w-full my-2 py-2 border-2 rounded-md bg-gray-800',
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'auth.login.submit',
-                'attr'  => [
-                    'class' => 'block w-full mt-10 my-2 py-4 border-2 rounded-md bg-blue-800'
-                ]
+                'attr' => [
+                    'class' => 'block w-full mt-10 my-2 py-4 border-2 rounded-md bg-blue-800',
+                ],
             ])
         ;
     }

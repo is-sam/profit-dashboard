@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Form\Type\DashboardSearchType;
 use App\Form\Model\DashboardSearch;
+use App\Form\Type\DashboardSearchType;
 use App\Service\DashboardService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,10 +30,10 @@ class DefaultController extends AbstractController
         $data = $dashboardService->getData($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
 
         return $this->render('home.html.twig', [
-            'searchForm'    => $searchForm->createView(),
-            'data'          => $data,
-            'dateStart'     => $dashboardSearch->getDateStart(),
-            'dateEnd'       => $dashboardSearch->getDateEnd()
+            'searchForm' => $searchForm->createView(),
+            'data' => $data,
+            'dateStart' => $dashboardSearch->getDateStart(),
+            'dateEnd' => $dashboardSearch->getDateEnd(),
         ]);
     }
 }

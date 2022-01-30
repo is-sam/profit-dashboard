@@ -10,7 +10,6 @@ use DateTime;
  */
 class SettingsService extends AbstractService
 {
-
     public function saveCustomCost($data)
     {
         $customCost = new CustomCost();

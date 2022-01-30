@@ -51,7 +51,7 @@ class DashboardService extends AbstractService
         /** @var CustomCostRepository $customCostRepository */
         $customCostRepository = $this->entityManager->getRepository(CustomCost::class);
         $customCosts = $customCostRepository->findBy([
-            'shop'  => $this->shop
+            'shop' => $this->shop,
         ]);
         $customCost = $this->dashboardCalculator->calculateCustomCosts($customCosts, $dateStart, $dateEnd);
 

@@ -146,12 +146,12 @@ class ShopifySession
         return $this;
     }
 
-    public function getOnlineAccessInfo(): Object|null
+    public function getOnlineAccessInfo(): object|null
     {
         return $this->onlineAccessInfo;
     }
 
-    public function setOnlineAccessInfo(Object|null $onlineAccessInfo): self
+    public function setOnlineAccessInfo(object|null $onlineAccessInfo): self
     {
         $this->onlineAccessInfo = $onlineAccessInfo;
 

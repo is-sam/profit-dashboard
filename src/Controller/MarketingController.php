@@ -3,11 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\MarketingAccount;
-use App\Entity\MarketingSource;
-use App\Model\Dashboard;
 use App\Repository\MarketingAccountRepository;
 use App\Repository\MarketingSourceRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use FacebookAds\Object\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,18 +33,17 @@ class MarketingController extends AbstractController
         Security $security,
         MarketingSourceRepository $marketingSourceRepository,
         MarketingAccountRepository $marketingAccountRepository
-    ): Response
-    {
+    ): Response {
         $shop = $security->getUser();
         $marketingSource = $marketingSourceRepository->findOneBy(['slug' => $slug]);
 
         if (empty($marketingSource)) {
-            throw $this->createNotFoundException("Marketing source not found !");
+            throw $this->createNotFoundException('Marketing source not found !');
         }
 
         $marketingAccount = $marketingAccountRepository->findOneBy([
-            'shop'              => $shop,
-            'marketingSource'   => $marketingSource
+            'shop' => $shop,
+            'marketingSource' => $marketingSource,
         ]);
 
         $adAccounts = [];
@@ -64,10 +60,10 @@ class MarketingController extends AbstractController
         }
 
         return $this->render('marketing/index.html.twig', [
-            'source'        => $marketingSource,
-            'account'       => $marketingAccount,
-            'adAccounts'    => $adAccounts,
-            'adAccountId'   => $adAccountId ?? null
+            'source' => $marketingSource,
+            'account' => $marketingAccount,
+            'adAccounts' => $adAccounts,
+            'adAccountId' => $adAccountId ?? null,
         ]);
     }
 
@@ -77,17 +73,16 @@ class MarketingController extends AbstractController
         Security $security,
         MarketingSourceRepository $marketingSourceRepository,
         MarketingAccountRepository $marketingAccountRepository
-    ) : Response
-    {
+    ): Response {
         $shop = $security->getUser();
         $marketingSource = $marketingSourceRepository->findOneBy(['slug' => 'facebook-ads']);
         if (empty($marketingSource)) {
-            throw $this->createNotFoundException("Marketing source not found !");
+            throw $this->createNotFoundException('Marketing source not found !');
         }
 
         $marketingAccount = $marketingAccountRepository->findOneBy([
-            'shop'              => $shop,
-            'marketingSource'   => $marketingSource
+            'shop' => $shop,
+            'marketingSource' => $marketingSource,
         ]);
 
         if (empty($marketingAccount)) {
@@ -110,7 +105,7 @@ class MarketingController extends AbstractController
         }
         $marketingAccount->setData($data);
         $this->entityManager->flush();
-    
+
         return new JsonResponse(['success' => true]);
     }
 
@@ -121,17 +116,16 @@ class MarketingController extends AbstractController
         Security $security,
         MarketingSourceRepository $marketingSourceRepository,
         MarketingAccountRepository $marketingAccountRepository
-    ) : Response
-    {
+    ): Response {
         $shop = $security->getUser();
         $marketingSource = $marketingSourceRepository->findOneBy(['slug' => $slug]);
         if (empty($marketingSource)) {
-            throw $this->createNotFoundException("Marketing source not found !");
+            throw $this->createNotFoundException('Marketing source not found !');
         }
 
         $marketingAccount = $marketingAccountRepository->findOneBy([
-            'shop'              => $shop,
-            'marketingSource'   => $marketingSource
+            'shop' => $shop,
+            'marketingSource' => $marketingSource,
         ]);
 
         if (!empty($marketingAccount)) {

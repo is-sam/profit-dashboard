@@ -53,8 +53,8 @@ class ShopifyContextSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::CONTROLLER    => 'onKernelController',
-            ConsoleEvents::COMMAND      => 'onConsoleCommand'
+            KernelEvents::CONTROLLER => 'onKernelController',
+            ConsoleEvents::COMMAND => 'onConsoleCommand',
         ];
     }
 }

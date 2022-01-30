@@ -27,6 +27,7 @@ class DashboardSearch
     {
         $dateStart->setTime(0, 0, 0);
         $this->dateStart = $dateStart;
+
         return $this;
     }
 
@@ -39,6 +40,7 @@ class DashboardSearch
     {
         $dateEnd->setTime(23, 59, 59);
         $this->dateEnd = $dateEnd;
+
         return $this;
     }
 }

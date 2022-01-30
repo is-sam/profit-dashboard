@@ -6,7 +6,7 @@ use App\Entity\Shop;
 use DateTime;
 
 /**
- * Dashboard Class
+ * Dashboard Class.
  */
 class Dashboard
 {
@@ -14,5 +14,6 @@ class Dashboard
         protected string $title,
         protected Shop $shop,
         protected DateTime $date,
-    ) {}
+    ) {
+    }
 }
