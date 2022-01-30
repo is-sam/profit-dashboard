@@ -4,26 +4,31 @@ namespace App\Security;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
-class ShopifyRedirectAuthenticator extends AbstractAuthenticator
+class ShopifyAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
     protected ShopifyAuthHelper $shopifyAuthHelper;
+    protected FlashBagInterface $flash;
 
-    public function __construct(ShopifyAuthHelper $shopifyAuthHelper)
+    public function __construct(ShopifyAuthHelper $shopifyAuthHelper, RequestStack $requestStack)
     {
         $this->shopifyAuthHelper = $shopifyAuthHelper;
+        $this->flash = $requestStack->getSession()->getBag('flashes');
     }
 
     public function supports(Request $request): ?bool
     {
-        return $request->attributes->get('_route') === 'home' and $request->query->get('hmac') !== null;
+        return $request->query->get('shop') and $request->query->get('hmac');
     }
 
     public function authenticate(Request $request): Passport
@@ -32,19 +37,25 @@ class ShopifyRedirectAuthenticator extends AbstractAuthenticator
 
         $this->shopifyAuthHelper->validateParams($params);
 
-        $passport = new SelfValidatingPassport(new UserBadge($params['shop']), []);
+        $this->shopifyAuthHelper->createShopIfNotExists($params['shop']);
 
-        return $passport;
+        return new SelfValidatingPassport(new UserBadge($params['shop']), []);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        return new RedirectResponse('/');
+        return null;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
+        $this->flash->add('error', "Authentication failure: {$exception->getMessage()}");
+
         return new RedirectResponse('/auth/login');
     }
 
+    public function start(Request $request, AuthenticationException $authException = null): Response
+    {
+         return new RedirectResponse('/auth/login');
+    }
 }

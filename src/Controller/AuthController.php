@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Shopify\Clients\Http;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class AuthController.
@@ -45,30 +46,27 @@ class AuthController extends AbstractController
     #[Route('/auth/callback', name: 'auth_callback')]
     public function callback(
         Request $request,
-        ShopRepository $shopRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        Security $security
     ) {
-        // $shopifySession = OAuth::callback($request->cookies->all(), $request->query->all());
-        $shop = $shopRepository->findOneBy(['url' => $request->query->get('shop')]);
+        /** @var Shop $shop */
+        $shop = $security->getUser();
 
-        if (empty($shop)) {
-            $shop = new Shop();
-            $shop->setUrl($request->query->get('shop'));
+        if ($shop->getAccessToken() === null) {
+            dump("get access token");
+            $http = new Http($shop->getUrl());
+            $response = $http->post("/admin/oauth/access_token", [
+                'client_id'     =>	$this->getParameter('shopify.api.key'),
+                'client_secret' =>	$this->getParameter('shopify.api.secret'),
+                'code'          =>	$request->query->get('code')
+            ]);
+
+            $data = $response->getDecodedBody();
+
+            $shop->setAccessToken($data['access_token']);
+
+            $entityManager->flush();
         }
-
-        $http = new Http($shop->getUrl());
-        $response = $http->post("/admin/oauth/access_token", [
-            'client_id'     =>	$this->getParameter('shopify.api.key'),
-            'client_secret' =>	$this->getParameter('shopify.api.secret'),
-            'code'          =>	$request->query->get('code')
-        ]);
-
-        $data = $response->getDecodedBody();
-
-        $shop->setAccessToken($data['access_token']);
-
-        $entityManager->persist($shop);
-        $entityManager->flush();
 
         return $this->redirectToRoute('home');
     }

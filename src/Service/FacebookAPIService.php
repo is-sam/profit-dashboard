@@ -18,7 +18,9 @@ class FacebookAPIService extends AbstractService
 
     public function getAdSpendByDate(DateTime $dateStart, DateTime $dateEnd): ?float
     {
-        $adAccountId = $this->getLinkedAdAccount();
+        if (!$adAccountId = $this->getLinkedAdAccount()) {
+            return null;
+        }
 
         $account = new AdAccount("act_$adAccountId");
 
@@ -46,7 +48,7 @@ class FacebookAPIService extends AbstractService
         return $spend;
     }
 
-    public function getLinkedAdAccount(): string
+    public function getLinkedAdAccount(): ?string
     {
         /** @var MarketingAccountRepository $marketingAccountRepository */
         $marketingAccountRepository = $this->entityManager->getRepository(MarketingAccount::class);
@@ -59,7 +61,7 @@ class FacebookAPIService extends AbstractService
         }
 
         if ($adAccountId === null) {
-            throw new Exception("Facebook Account not linked");
+            // throw new Exception("Facebook Account not linked");
         }
 
         return $adAccountId;

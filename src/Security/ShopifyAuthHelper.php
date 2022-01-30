@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Entity\Shop;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
@@ -11,10 +13,12 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class ShopifyAuthHelper
 {
     protected string $key;
+    protected EntityManagerInterface $entityManager;
 
-    public function __construct(ParameterBagInterface $parameterBag)
+    public function __construct(ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager)
     {
         $this->key = $parameterBag->get('shopify.api.secret');
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -36,6 +40,21 @@ class ShopifyAuthHelper
         $hash = hash_hmac('sha256', http_build_query($params), $this->key);
         if ($hmac !== $hash) {
             throw new AuthenticationException("HMAC not valid");
+        }
+        dump("valid params");
+    }
+
+    public function createShopIfNotExists(string $url)
+    {
+        /** @var ShopRepository $shopRepository */
+        $shop = $this->entityManager->getRepository(Shop::class)->findOneBy(['url' => $url]);
+
+        if (empty($shop)) {
+            dump("create new shop");
+            $shop = new Shop();
+            $shop->setUrl($url);
+            $this->entityManager->persist($shop);
+            $this->entityManager->flush();
         }
     }
 }

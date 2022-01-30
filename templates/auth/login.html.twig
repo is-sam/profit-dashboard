@@ -6,6 +6,12 @@
     <div class="mt-40 max-w-lg mx-auto px-10">
         <h3 class="text-3xl mb-10">{{ 'auth.login.title' | trans }}</h3>
 
+        {% for message in app.flashes('error') %}
+            <div class="w-full p-4 mb-4 bg-red-200 text-red-800 border border-red-800">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {{ form(loginForm) }}
     </div>
 
