@@ -18,7 +18,7 @@ class MarketingAccount
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=MarketingSource::class, inversedBy="marketingAccounts")
+     * @ORM\ManyToOne(targetEntity=MarketingSource::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $marketingSource;
