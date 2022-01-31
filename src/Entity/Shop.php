@@ -51,12 +51,18 @@ class Shop implements UserInterface
      */
     private $customCosts;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ShippingProfile::class, mappedBy="shop", orphanRemoval=true)
+     */
+    private $shippingProfiles;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->creationDate = new DateTime();
         $this->marketingAccounts = new ArrayCollection();
         $this->customCosts = new ArrayCollection();
+        $this->shippingProfiles = new ArrayCollection();
     }
 
     public function getUserIdentifier(): string
@@ -199,6 +205,36 @@ class Shop implements UserInterface
             // set the owning side to null (unless already changed)
             if ($customCost->getShop() === $this) {
                 $customCost->setShop(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ShippingProfile[]
+     */
+    public function getShippingProfiles(): Collection
+    {
+        return $this->shippingProfiles;
+    }
+
+    public function addShippingProfile(ShippingProfile $shippingProfile): self
+    {
+        if (!$this->shippingProfiles->contains($shippingProfile)) {
+            $this->shippingProfiles[] = $shippingProfile;
+            $shippingProfile->setShop($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShippingProfile(ShippingProfile $shippingProfile): self
+    {
+        if ($this->shippingProfiles->removeElement($shippingProfile)) {
+            // set the owning side to null (unless already changed)
+            if ($shippingProfile->getShop() === $this) {
+                $shippingProfile->setShop(null);
             }
         }
 

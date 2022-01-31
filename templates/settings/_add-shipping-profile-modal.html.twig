@@ -15,19 +15,19 @@
       <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5">
         <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
           <p class="mb-2 font-semibold text-gray-200">Countries</p>
-          <select name="frequency" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none">
-            <option value="onetime">One time</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="quarterly">Quarterly</option>
-            <option value="yearly">Yearly</option>
+          <select name="countries[]" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none" multiple>
+            <option value="fr">France</option>
+            <option value="uk">United Kingdom</option>
+            <option value="de">Germany</option>
+            <option value="us">United States</option>
+            <option value="es">Spain</option>
+            <option value="ma">Morroco</option>
           </select>
         </div>
 
         <div class="w-full sm:w-1/2">
-          <p class="mb-2 font-semibold text-gray-200">Amount</p>
-          <input type="number" name="amount" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none">
+          <p class="mb-2 font-semibold text-gray-200">Cost</p>
+          <input type="number" name="cost" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none">
         </div>
       </div>
     </div>

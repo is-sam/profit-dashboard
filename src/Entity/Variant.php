@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VariantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +39,16 @@ class Variant
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=ShippingProfile::class, mappedBy="variants")
+     */
+    private $shippingProfiles;
+
+    public function __construct()
+    {
+        $this->shippingProfiles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +99,33 @@ class Variant
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ShippingProfile[]
+     */
+    public function getShippingProfiles(): Collection
+    {
+        return $this->shippingProfiles;
+    }
+
+    public function addShippingProfile(ShippingProfile $shippingProfile): self
+    {
+        if (!$this->shippingProfiles->contains($shippingProfile)) {
+            $this->shippingProfiles[] = $shippingProfile;
+            $shippingProfile->addVariant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShippingProfile(ShippingProfile $shippingProfile): self
+    {
+        if ($this->shippingProfiles->removeElement($shippingProfile)) {
+            $shippingProfile->removeVariant($this);
+        }
 
         return $this;
     }

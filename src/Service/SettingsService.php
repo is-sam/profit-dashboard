@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\CustomCost;
+use App\Entity\ShippingProfile;
 use DateTime;
 
 /**
@@ -10,7 +11,7 @@ use DateTime;
  */
 class SettingsService extends AbstractService
 {
-    public function saveCustomCost($data)
+    public function saveCustomCost(array $data)
     {
         $customCost = new CustomCost();
         $customCost
@@ -31,6 +32,25 @@ class SettingsService extends AbstractService
     public function deleteCustomCost(CustomCost $cost)
     {
         $this->entityManager->remove($cost);
+        $this->entityManager->flush();
+    }
+
+    public function saveShippingProfile(array $data)
+    {
+        $profile = new ShippingProfile();
+        $profile
+            ->setShop($this->shop)
+            ->setName($data['name'])
+            ->setCountries($data['countries'])
+            ->setCost($data['cost']);
+
+        $this->entityManager->persist($profile);
+        $this->entityManager->flush();
+    }
+
+    public function deleteShippingProfile(ShippingProfile $profile)
+    {
+        $this->entityManager->remove($profile);
         $this->entityManager->flush();
     }
 }

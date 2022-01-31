@@ -2,16 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\CustomCost;
+use App\Entity\ShippingProfile;
+use App\Entity\Variant;
 use App\Repository\CustomCostRepository;
 use App\Repository\ProductRepository;
-use App\Repository\VariantRepository;
+use App\Repository\ShippingProfileRepository;
 use App\Service\SettingsService;
 use App\Service\ShopifyAdminAPIService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -20,12 +23,19 @@ use Symfony\Component\Security\Core\Security;
  */
 class SettingsController extends AbstractController
 {
+    protected EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('/settings/cogs', name: 'settings_cogs')]
     public function cogs(
         Request $request,
         ProductRepository $productRepository,
         ShopifyAdminAPIService $adminAPI
-    ) {
+    ): Response {
         $shop = $this->getUser();
 
         if ($request->isMethod('POST')) {
@@ -39,22 +49,18 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[Route('/settings/cogs/update/{variantId}', name: 'settings_cogs_update')]
-    public function cogsUpdate(int $variantId, Request $request, VariantRepository $variantRepository, EntityManagerInterface $entityManager)
-    {
-        $variant = $variantRepository->find($variantId);
-
-        if (!$variant) {
-            throw new Exception("Variant $variantId does not exist !");
-        }
-
+    #[Route('/settings/cogs/{variant}/update', name: 'settings_cogs_update')]
+    public function cogsUpdate(
+        Variant $variant,
+        Request $request,
+    ): Response {
         $data = json_decode($request->getContent(), true);
 
         $newCost = $data['cost'];
 
         // TODO: validate cost
         $variant->setCost($newCost);
-        $entityManager->flush();
+        $this->entityManager->flush();
 
         return new JsonResponse([
             'success' => true,
@@ -68,7 +74,7 @@ class SettingsController extends AbstractController
         SettingsService $settingsService,
         CustomCostRepository $customCostRepository,
         Security $security
-    ) {
+    ): Response {
         if ($request->isMethod('POST')) {
             $settingsService->saveCustomCost($request->request->all());
         }
@@ -83,21 +89,11 @@ class SettingsController extends AbstractController
         ]);
     }
 
-    #[Route('/settings/custom-costs/{id}/delete', name: 'settings_custom_delete')]
-    public function custom_delete(
-        string $id,
-        Request $request,
-        SettingsService $settingsService,
-        CustomCostRepository $customCostRepository,
-        Security $security
-    ) {
-        $customCost = $customCostRepository->find($id);
-
-        if (empty($customCost)) {
-            throw new Exception("Custom cost $id does not exist!");
-        }
-
-        $settingsService->deleteCustomCost($customCost);
+    #[Route('/settings/custom-costs/{customCost}/delete', name: 'settings_custom_delete')]
+    public function custom_delete(CustomCost $customCost): Response
+    {
+        $this->entityManager->remove($customCost);
+        $this->entityManager->flush();
 
         return $this->redirectToRoute('settings_custom');
     }
@@ -105,12 +101,32 @@ class SettingsController extends AbstractController
     #[Route('/settings/shipping', name: 'settings_shipping')]
     public function shipping(
         Request $request,
-        Security $security
-    ) {
+        Security $security,
+        SettingsService $settingsService,
+        ShippingProfileRepository $shippingProfileRepository
+    ): Response {
         $shop = $security->getUser();
 
-        return $this->render('settings/shipping.html.twig', [
-            'profiles' => [],
+        if ($request->isMethod('POST')) {
+            $settingsService->saveShippingProfile($request->request->all());
+        }
+
+        $profiles = $shippingProfileRepository->findBy([
+            'shop' => $shop,
+            'isVariantProfile' => false
         ]);
+
+        return $this->render('settings/shipping.html.twig', [
+            'profiles' => $profiles,
+        ]);
+    }
+
+    #[Route('/settings/shipping/{profile}/delete', name: 'settings_shipping_delete')]
+    public function shippinh_delete(ShippingProfile $profile): Response
+    {
+        $this->entityManager->remove($profile);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('settings_shipping');
     }
 }
