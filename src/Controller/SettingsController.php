@@ -8,6 +8,7 @@ use App\Entity\Variant;
 use App\Repository\CustomCostRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ShippingProfileRepository;
+use App\Repository\VariantRepository;
 use App\Service\SettingsService;
 use App\Service\ShopifyAdminAPIService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -103,7 +104,8 @@ class SettingsController extends AbstractController
         Request $request,
         Security $security,
         SettingsService $settingsService,
-        ShippingProfileRepository $shippingProfileRepository
+        ShippingProfileRepository $shippingProfileRepository,
+        VariantRepository $variantRepository,
     ): Response {
         $shop = $security->getUser();
 
@@ -111,13 +113,22 @@ class SettingsController extends AbstractController
             $settingsService->saveShippingProfile($request->request->all());
         }
 
+        $variants = $variantRepository->getVariantsByShop($shop);
+
         $profiles = $shippingProfileRepository->findBy([
             'shop' => $shop,
             'isVariantProfile' => false
         ]);
 
+        $variantProfiles = $shippingProfileRepository->findBy([
+            'shop' => $shop,
+            'isVariantProfile' => true
+        ]);
+
         return $this->render('settings/shipping.html.twig', [
+            'variants' => $variants,
             'profiles' => $profiles,
+            'variantProfiles' => $variantProfiles,
         ]);
     }
 

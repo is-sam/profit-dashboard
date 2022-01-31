@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\CustomCost;
 use App\Entity\ShippingProfile;
+use App\Entity\Variant;
 use DateTime;
 
 /**
@@ -41,8 +42,20 @@ class SettingsService extends AbstractService
         $profile
             ->setShop($this->shop)
             ->setName($data['name'])
-            ->setCountries($data['countries'])
             ->setCost($data['cost']);
+
+        if (!empty($data['countries'])) {
+            $profile->setCountries($data['countries']);
+        }
+
+        if (!empty($data['variants'])) {
+            foreach ($data['variants'] as $variantId) {
+                $variantRepository = $this->entityManager->getRepository(Variant::class);
+                $variant = $variantRepository->find($variantId);
+                $profile->addVariant($variant);
+            }
+            $profile->setIsVariantProfile(true);
+        }
 
         $this->entityManager->persist($profile);
         $this->entityManager->flush();

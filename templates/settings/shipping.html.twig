@@ -44,5 +44,38 @@
         </tbody>
     </table>
 
-    {% include 'settings/_add-shipping-profile-modal.html.twig' %}
+        <table class="min-w-full leading-normal">
+        <thead>
+            <tr class="text-left border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th class="px-5 py-3">Name</th>
+                <th class="px-5 py-3">Variants</th>
+                <th class="px-5 py-3">Counties</th>
+                <th class="px-5 py-3">Cost</th>
+                <th class="px-5 py-3">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for profile in variantProfiles %}
+                <tr class="border-b border-gray-200 bg-gray-800 text-sm">
+                    <td class="px-5 py-5 w-1/10">{{ profile.name }}</td>
+                    <td class="px-5 py-5 w-1/10">{{ profile.variants | map(v => "#{v.product.title} - #{v.title}")|join(' / ') }}</td>
+                    <td class="px-5 py-5 w-1/10">{{ profile.countries | join(', ') }}</td>
+                    <td class="px-5 py-5 w-1/10">{{ profile.cost | format_currency('EUR') }}</td>
+                    <td class="px-5 py-5 w-1/10">
+                        <a href="{{ path('settings_shipping_delete', {profile: profile.id}) }}"><i class="fa fa-trash text-red-500"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if not profiles %}
+                <tr>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-gray-800 text-sm w-1/10" colspan=5>
+                        No shipping profiles have been added. Make sure you add your shipping profiles.
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {% include 'settings/_add-shipping-profile-modal.html.twig' with { variants: variants } %}
 {% endblock %}
