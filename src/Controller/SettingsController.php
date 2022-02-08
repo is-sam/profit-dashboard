@@ -113,22 +113,22 @@ class SettingsController extends AbstractController
             $settingsService->saveShippingProfile($request->request->all());
         }
 
-        $variants = $variantRepository->getVariantsByShop($shop);
+        // $variants = $variantRepository->getVariantsByShop($shop);
 
         $profiles = $shippingProfileRepository->findBy([
             'shop' => $shop,
             'isVariantProfile' => false
         ]);
 
-        $variantProfiles = $shippingProfileRepository->findBy([
-            'shop' => $shop,
-            'isVariantProfile' => true
-        ]);
+        // $variantProfiles = $shippingProfileRepository->findBy([
+        //     'shop' => $shop,
+        //     'isVariantProfile' => true
+        // ]);
 
         return $this->render('settings/shipping.html.twig', [
-            'variants' => $variants,
+            // 'variants' => $variants,
             'profiles' => $profiles,
-            'variantProfiles' => $variantProfiles,
+            // 'variantProfiles' => $variantProfiles,
         ]);
     }
 

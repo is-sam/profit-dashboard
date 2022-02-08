@@ -34,7 +34,7 @@
                     <td class="px-5 py-5 w-1/10">{{ cost.frequency }}</td>
                     <td class="px-5 py-5 w-1/10">{{ cost.amount | format_currency('EUR') }}</td>
                     <td class="px-5 py-5 w-1/10">
-                        <a href="{{ path('settings_custom_delete', {id: cost.id}) }}"><i class="fa fa-trash text-red-500"></i></a>
+                        <a href="{{ path('settings_custom_delete', {customCost: cost.id}) }}"><i class="fa fa-trash text-red-500"></i></a>
                     </td>
                 </tr>
             {% endfor %}

@@ -44,7 +44,7 @@
         </tbody>
     </table>
 
-        <table class="min-w-full leading-normal">
+    {# <table class="min-w-full leading-normal">
         <thead>
             <tr class="text-left border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 <th class="px-5 py-3">Name</th>
@@ -75,7 +75,7 @@
                 </tr>
             {% endif %}
         </tbody>
-    </table>
+    </table> #}
 
-    {% include 'settings/_add-shipping-profile-modal.html.twig' with { variants: variants } %}
+    {% include 'settings/_add-shipping-profile-modal.html.twig' %}
 {% endblock %}

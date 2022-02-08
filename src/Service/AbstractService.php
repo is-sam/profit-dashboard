@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Security;
 class AbstractService
 {
     protected ?Shop $shop;
+    protected Security $security;
     protected EntityManagerInterface $entityManager;
 
     /**
@@ -22,6 +23,7 @@ class AbstractService
         Security $security,
     ) {
         $this->entityManager = $entityManager;
+        $this->security = $security;
         $this->shop = $security->getUser();
     }
 

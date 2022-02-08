@@ -16,7 +16,7 @@
         <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
           <p class="mb-2 font-semibold text-gray-200">Countries</p>
           <select name="countries[]" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none" multiple>
-            <option value="">None</option>
+            <option value="all">All</option>
             <option value="fr">France</option>
             <option value="uk">United Kingdom</option>
             <option value="de">Germany</option>
@@ -26,15 +26,15 @@
           </select>
         </div>
 
-        <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
+        {# <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
           <p class="mb-2 font-semibold text-gray-200">Variants</p>
           <select name="variants[]" class="w-full p-5 bg-gray-700 border border-gray-200 rounded shadow-sm appearance-none" multiple>
-            <option value="">None</option>
+            <option value="all">All</option>
             {% for variant in variants %}
             <option value="{{ variant.id }}">{{ variant.title }}</option>
             {% endfor %}
           </select>
-        </div>
+        </div> #}
 
         <div class="w-full sm:w-1/2">
           <p class="mb-2 font-semibold text-gray-200">Cost</p>
