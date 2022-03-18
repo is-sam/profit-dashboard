@@ -99,45 +99,45 @@ class SettingsController extends AbstractController
         return $this->redirectToRoute('settings_custom');
     }
 
-    #[Route('/settings/shipping', name: 'settings_shipping')]
-    public function shipping(
-        Request $request,
-        Security $security,
-        SettingsService $settingsService,
-        ShippingProfileRepository $shippingProfileRepository,
-        VariantRepository $variantRepository,
-    ): Response {
-        $shop = $security->getUser();
+    // #[Route('/settings/shipping', name: 'settings_shipping')]
+    // public function shipping(
+    //     Request $request,
+    //     Security $security,
+    //     SettingsService $settingsService,
+    //     ShippingProfileRepository $shippingProfileRepository,
+    //     VariantRepository $variantRepository,
+    // ): Response {
+    //     $shop = $security->getUser();
 
-        if ($request->isMethod('POST')) {
-            $settingsService->saveShippingProfile($request->request->all());
-        }
+    //     if ($request->isMethod('POST')) {
+    //         $settingsService->saveShippingProfile($request->request->all());
+    //     }
 
-        // $variants = $variantRepository->getVariantsByShop($shop);
+    //     // $variants = $variantRepository->getVariantsByShop($shop);
 
-        $profiles = $shippingProfileRepository->findBy([
-            'shop' => $shop,
-            'isVariantProfile' => false
-        ]);
+    //     $profiles = $shippingProfileRepository->findBy([
+    //         'shop' => $shop,
+    //         'isVariantProfile' => false
+    //     ]);
 
-        // $variantProfiles = $shippingProfileRepository->findBy([
-        //     'shop' => $shop,
-        //     'isVariantProfile' => true
-        // ]);
+    //     // $variantProfiles = $shippingProfileRepository->findBy([
+    //     //     'shop' => $shop,
+    //     //     'isVariantProfile' => true
+    //     // ]);
 
-        return $this->render('settings/shipping.html.twig', [
-            // 'variants' => $variants,
-            'profiles' => $profiles,
-            // 'variantProfiles' => $variantProfiles,
-        ]);
-    }
+    //     return $this->render('settings/shipping.html.twig', [
+    //         // 'variants' => $variants,
+    //         'profiles' => $profiles,
+    //         // 'variantProfiles' => $variantProfiles,
+    //     ]);
+    // }
 
-    #[Route('/settings/shipping/{profile}/delete', name: 'settings_shipping_delete')]
-    public function shippinh_delete(ShippingProfile $profile): Response
-    {
-        $this->entityManager->remove($profile);
-        $this->entityManager->flush();
+    // #[Route('/settings/shipping/{profile}/delete', name: 'settings_shipping_delete')]
+    // public function shippinh_delete(ShippingProfile $profile): Response
+    // {
+    //     $this->entityManager->remove($profile);
+    //     $this->entityManager->flush();
 
-        return $this->redirectToRoute('settings_shipping');
-    }
+    //     return $this->redirectToRoute('settings_shipping');
+    // }
 }

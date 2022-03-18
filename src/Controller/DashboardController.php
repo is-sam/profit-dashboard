@@ -29,7 +29,7 @@ class DashboardController extends AbstractController
 
         $data = $dashboardService->getData($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
 
-        return $this->render('home.html.twig', [
+        return $this->render('dashboard.html.twig', [
             'searchForm' => $searchForm->createView(),
             'data' => $data,
             'dateStart' => $dashboardSearch->getDateStart(),

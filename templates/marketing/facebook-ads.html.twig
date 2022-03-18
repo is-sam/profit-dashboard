@@ -14,7 +14,7 @@
             </a>
         {% else %}
             <p>No account connected</p>
-            <button class="mt-4 px-4 py-3 bg-gray-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform" onclick="loginFacebook()">
+            <button onclick="loginFacebook()" class="mt-4 px-4 py-3 bg-gray-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform">
                 Connect
             </button>
         {% endif %}
@@ -61,14 +61,22 @@
                     console.log('connected', response);
                     let data = {userId: response.authResponse.userID};
 
-                    fetch(`/marketing/facebook-ads/set-data`, {
+                    fetch(`/marketing/facebook-ads/get-user-ad-accounts`, {
+                        method: "POST",
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(data)
+                    }).then(res => {
+                        console.log("response:", res);
+                    });
+
+                    /* fetch(`/marketing/facebook-ads/set-data`, {
                         method: "POST",
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify(data)
                     }).then(res => {
                         console.log("Request complete! response:", res);
                         window.location.reload();
-                    });
+                    }); */
                 }
             });
         }

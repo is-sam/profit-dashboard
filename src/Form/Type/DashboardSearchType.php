@@ -18,20 +18,20 @@ class DashboardSearchType extends AbstractType
                 'label' => 'dashboard.filter.datestart',
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'px-4 py-3 border-2 rounded-md bg-gray-800',
+                    'class' => 'px-4 py-3 mt-2 rounded-md bg-gray-800',
                 ],
             ])
             ->add('dateEnd', DateType::class, [
                 'label' => 'dashboard.filter.dateend',
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'px-4 py-3 border-2 rounded-md bg-gray-800',
+                    'class' => 'px-4 py-3 mt-2 rounded-md bg-gray-800',
                 ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'dashboard.filter.submit',
                 'attr' => [
-                    'class' => 'px-4 py-3 rounded-md border-2 bg-gray-800 hover:bg-gray-600 border-gray-300 focus:ring-4 transform active:scale-y-75 transition-transform flex',
+                    'class' => 'px-4 py-3 rounded-md text-gray-800 font-medium bg-gray-200 hover:bg-gray-400 focus:ring-4 transform active:scale-y-75 transition-transform flex',
                 ],
             ])
         ;

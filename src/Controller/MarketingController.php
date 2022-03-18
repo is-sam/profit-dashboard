@@ -6,7 +6,7 @@ use App\Entity\MarketingAccount;
 use App\Repository\MarketingAccountRepository;
 use App\Repository\MarketingSourceRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use FacebookAds\Object\User;
+use FacebookAds\Object\User as FacebookUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +30,10 @@ class MarketingController extends AbstractController
     public function index(
         string $slug,
         Request $request,
-        Security $security,
         MarketingSourceRepository $marketingSourceRepository,
         MarketingAccountRepository $marketingAccountRepository
     ): Response {
-        $shop = $security->getUser();
+        $shop = $this->getUser();
         $marketingSource = $marketingSourceRepository->findOneBy(['slug' => $slug]);
 
         if (empty($marketingSource)) {
@@ -51,7 +50,7 @@ class MarketingController extends AbstractController
             $data = $marketingAccount->getData();
             $userId = $data['user_id'];
             $adAccountId = $data['account_id'] ?? null;
-            $user = new User($userId);
+            $user = new FacebookUser($userId);
             $response = $user->getAdAccounts(['name', 'account_id'])
                 ->getResponse()
                 ->getContent();
@@ -67,15 +66,32 @@ class MarketingController extends AbstractController
         ]);
     }
 
+    #[Route('/marketing/facebook-ads/get-user-ad-accounts', name: 'marketing_fb_user_accounts', methods: ['POST'])]
+    public function getFacebookAdAccounts(
+        string $userId,
+        Request $request,
+    ): Response {
+        $content = json_decode($request->getContent(), true);
+        $userId = $content['userId'];
+
+        $user = new FacebookUser($userId);
+        $response = $user->getAdAccounts(['name', 'account_id'])
+            ->getResponse()
+            ->getContent();
+
+        $adAccounts = $response['data'];
+
+        return $this->json(['accounts' => $adAccounts]);
+    }
+
     #[Route('/marketing/{slug}/set-data', name: 'marketing_set_data', methods: ['POST'])]
-    public function fbAdAccounts(
+    public function setData(
         string $slug,
         Request $request,
-        Security $security,
         MarketingSourceRepository $marketingSourceRepository,
         MarketingAccountRepository $marketingAccountRepository
     ): Response {
-        $shop = $security->getUser();
+        $shop = $this->getUser();
         $marketingSource = $marketingSourceRepository->findOneBy(['slug' => $slug]);
         if (empty($marketingSource)) {
             throw $this->createNotFoundException('Marketing source not found !');
@@ -107,7 +123,7 @@ class MarketingController extends AbstractController
         $marketingAccount->setData($data);
         $this->entityManager->flush();
 
-        return new JsonResponse(['success' => true]);
+        return $this->json(['success' => true]);
     }
 
     #[Route('/marketing/{slug}/disconnect', name: 'marketing_source_disconnect')]
