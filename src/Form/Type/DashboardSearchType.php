@@ -31,7 +31,7 @@ class DashboardSearchType extends AbstractType
             ->add('submit', SubmitType::class, [
                 'label' => 'dashboard.filter.submit',
                 'attr' => [
-                    'class' => 'px-4 py-3 rounded-md text-gray-800 font-medium bg-gray-200 hover:bg-gray-400 focus:ring-4 transform active:scale-y-75 transition-transform flex',
+                    'class' => 'btn',
                 ],
             ])
         ;
