@@ -6,7 +6,21 @@
         <i class="fa fa-times"></i>
       </button>
     </div>
-    <form action="" method="POST">
+
+    {{ form_start(customCostForm) }}
+      <div class="flex flex-col px-6 py-5 bg-gray-800 gap-4">
+        {{ form_row(customCostForm.name) }}
+        {{ form_row(customCostForm.startDate) }}
+        {{ form_row(customCostForm.endDate) }}
+        {{ form_row(customCostForm.amount) }}
+        {{ form_row(customCostForm.frequency) }}
+      </div>
+      <div class="flex flex-row items-center justify-between p-5 bg-gray-800 border-t border-gray-200 rounded-bl-lg rounded-br-lg">
+        {{ form_row(customCostForm.cancel) }}
+        {{ form_row(customCostForm.add) }}
+      </div>
+    {{ form_end(customCostForm) }}
+    {# <form action="" method="POST">
     <div class="flex flex-col px-6 py-5 bg-gray-800">
       <p class="mb-2 font-semibold text-gray-200">Name</p>
       <input type="text" name="name" placeholder="Custom expense name ..."
@@ -51,6 +65,6 @@
             Add
         </button>
     </div>
-  </form>
+  </form> #}
   </div>
 </div>

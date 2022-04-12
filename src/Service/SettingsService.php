@@ -12,19 +12,9 @@ use DateTime;
  */
 class SettingsService extends AbstractService
 {
-    public function saveCustomCost(array $data)
+    public function saveCustomCost(CustomCost $customCost)
     {
-        $customCost = new CustomCost();
-        $customCost
-            ->setShop($this->shop)
-            ->setName($data['name'])
-            ->setStartDate(new DateTime($data['start_date']))
-            ->setAmount($data['amount'])
-            ->setFrequency($data['frequency']);
-
-        if (!empty($data['end_date'])) {
-            $customCost->setEndDate(new DateTime($data['end_date']));
-        }
+        $customCost->setShop($this->shop);
 
         $this->entityManager->persist($customCost);
         $this->entityManager->flush();

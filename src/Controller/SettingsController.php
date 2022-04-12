@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\CustomCost;
 use App\Entity\ShippingProfile;
 use App\Entity\Variant;
+use App\Form\CustomCostType;
 use App\Repository\CustomCostRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ShippingProfileRepository;
@@ -80,8 +81,11 @@ class SettingsController extends AbstractController
         CustomCostRepository $customCostRepository,
         Security $security
     ): Response {
-        if ($request->isMethod('POST')) {
-            $settingsService->saveCustomCost($request->request->all());
+        $customCostForm = $this->createForm(CustomCostType::class);
+        $customCostForm->handleRequest($request);
+
+        if ($customCostForm->isSubmitted() and $customCostForm->isValid()) {
+            $settingsService->saveCustomCost($customCostForm->getData());
         }
 
         $shop = $security->getUser();
@@ -91,6 +95,7 @@ class SettingsController extends AbstractController
 
         return $this->render('settings/custom.html.twig', [
             'costs' => $costs,
+            'customCostForm' => $customCostForm->createView(),
         ]);
     }
 
