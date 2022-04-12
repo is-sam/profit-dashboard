@@ -18,14 +18,14 @@ class DashboardSearchType extends AbstractType
                 'label' => 'dashboard.filter.datestart',
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'px-4 py-3 mt-2 rounded-md bg-gray-800',
+                    'class' => 'px-4 py-3 mt-2 rounded-md bg-gray-800 border-0',
                 ],
             ])
             ->add('dateEnd', DateType::class, [
                 'label' => 'dashboard.filter.dateend',
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'px-4 py-3 mt-2 rounded-md bg-gray-800',
+                    'class' => 'px-4 py-3 mt-2 rounded-md bg-gray-800 border-0',
                 ],
             ])
             ->add('submit', SubmitType::class, [
