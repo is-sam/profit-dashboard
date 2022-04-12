@@ -6,11 +6,11 @@
     <div class="grid grid-cols-4 mb-4">
         <h2 class="text-2xl font-medium my-4 col-span-3">{{ 'settings.cogs.title' | trans }}</h2>
 
-        <form method="post" name="sync" class="mb-4 flex flex-row-reverse">
-            <button type="submit" class="px-4 py-3 bg-green-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
+        <div class="mb-4 flex flex-row-reverse">
+            <a href="{{ path('settings_sync_products') }}" class="px-4 py-3 bg-green-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
                 <i class="fa fa-sync pr-2"></i> Sync Products
-            </button>
-        </form>
+            </a>
+        </div>
     </div>
 
     {% if products %}

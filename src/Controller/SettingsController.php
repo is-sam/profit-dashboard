@@ -35,19 +35,23 @@ class SettingsController extends AbstractController
     public function cogs(
         Request $request,
         ProductRepository $productRepository,
-        ShopifyAdminAPIService $adminAPI
     ): Response {
         $shop = $this->getUser();
-
-        if ($request->isMethod('POST')) {
-            $adminAPI->syncProducts();
-        }
 
         $products = $productRepository->getProductsWithVariantsByShop($shop);
 
         return $this->render('settings/cogs.html.twig', [
             'products' => $products,
         ]);
+    }
+
+    #[Route('/settings/cogs/sync-products', name: 'settings_sync_products')]
+    public function syncProducts(
+        ShopifyAdminAPIService $adminAPI
+    ): Response {
+        $adminAPI->syncProducts();
+
+        return $this->redirectToRoute('settings_cogs');
     }
 
     #[Route('/settings/cogs/{variant}/update', name: 'settings_cogs_update')]
