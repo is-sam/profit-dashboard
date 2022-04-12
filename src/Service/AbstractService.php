@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\Security;
 class AbstractService
 {
     protected ?Shop $shop;
-    protected Security $security;
     protected EntityManagerInterface $entityManager;
 
     /**
