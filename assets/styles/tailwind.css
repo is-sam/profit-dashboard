@@ -6,4 +6,21 @@
     .btn {
         @apply px-4 py-3 rounded-md text-gray-800 font-medium bg-gray-200 hover:bg-gray-400 focus:ring-4 transform active:scale-y-75 transition-transform flex;
     }
+
+    /** Form classes **/
+    .form-row {
+        @apply w-full;
+    }
+
+    .form-label {
+        @apply mb-4 font-semibold text-gray-200;
+    }
+
+    .form-widget {
+        @apply w-full p-4 bg-gray-700  rounded shadow-sm appearance-none;
+    }
+
+    .form-checkbox {
+        @apply rounded border-2 border-gray-200;
+    }
 }
