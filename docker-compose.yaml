@@ -1,20 +1,36 @@
 version: '3.7'
 services:
     database:
-        image: 'mariadb:latest'
+        image: 'mariadb:10.7.3'
+        container_name: profit_dashboard_database
         environment:
             MYSQL_ROOT_PASSWORD: dev
             MYSQL_DATABASE: profit_dashboard
         ports:
-            # To allow the host machine to access the ports below, modify the lines below.
-            # For example, to allow the host to connect to port 3306 on the container, you would change
-            # "3306" to "3306:3306". Where the first port is exposed to the host and the second is the container port.
-            # See https://docs.docker.com/compose/compose-file/#ports for more information.
             - 3306:3306
     adminer:
-        # image: adminer
-        build:
-            context: docker/adminer
-        restart: always
+        build: docker/adminer
+        container_name: profit_dashboard_adminer
+        depends_on:
+            - database
         ports:
             - 8080:8080
+    app:
+        build: docker/app
+        container_name: profit_dashboard_app
+        depends_on:
+            - database
+        volumes:
+            - .:/var/www
+            - ./docker/app/apache.conf:/etc/apache2/sites-available/000-default.conf
+        ports:
+            - 8000:8000
+        entrypoint: docker-entrypoint.sh
+    # localtunnel:
+    #     image: efrecon/localtunnel
+    #     depends_on:
+    #         - app
+    #     links:
+    #         - app
+    #     command:
+    #         --local-host app --port 8000 -s profitdashboard
