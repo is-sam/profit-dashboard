@@ -23,9 +23,10 @@ services:
         volumes:
             - .:/var/www
             - ./docker/app/apache.conf:/etc/apache2/sites-available/000-default.conf
+            - ./docker/app/entrypoint.sh:/home/docker-entrypoint.sh
         ports:
             - 8000:8000
-        entrypoint: docker-entrypoint.sh
+        command: /home/docker-entrypoint.sh
     # localtunnel:
     #     image: efrecon/localtunnel
     #     depends_on:

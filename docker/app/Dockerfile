@@ -27,8 +27,3 @@ WORKDIR /var/www
 
 # Install SSL certificate
 RUN symfony server:ca:install
-
-# entrypoint
-COPY ./entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod 777 /usr/local/bin/docker-entrypoint.sh \
-    && ln -s /usr/local/bin/docker-entrypoint.sh /
