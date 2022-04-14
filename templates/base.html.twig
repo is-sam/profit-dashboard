@@ -32,6 +32,13 @@
                 {{ dump(app.session.all()) }}
             {% endif %}
         </div>
+        <div class="fixed right-0 top-0 p-2 sm:p-6">
+            {% for type, messages in app.flashes %}
+                {% for id, message in messages %}
+                    {% include "components/toast.html.twig" with {id: id, type: type, message: message} %}
+                {% endfor %}
+            {% endfor %}
+        </div>
         <script>
             document.querySelectorAll('[data-modal-btn]').forEach(button => {
                 button.addEventListener('click', (event) => {
