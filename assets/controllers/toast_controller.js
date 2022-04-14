@@ -5,7 +5,7 @@ export default class extends Controller {
 
     close(event) {
         let toast = document.querySelector(this.element.dataset.dismissTarget);
-        toast.classList.add('transform', 'opacity-0', 'transition', 'duration-1000');
-        setTimeout(() => toast.remove(), 1000);
+        toast.classList.add('transform', 'opacity-0', 'transition', 'duration-500');
+        setTimeout(() => toast.remove(), 500);
     }
 }

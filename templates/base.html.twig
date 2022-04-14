@@ -44,6 +44,8 @@
                 button.addEventListener('click', (event) => {
                     let modalName = button.dataset.modalBtn;
                     let modal = document.querySelector(`div[data-modal=${modalName}]`);
+                    modal.classList.remove('animate-fade-out');
+                    modal.classList.add('animate-fade-in');
                     modal.classList.remove('hidden');
                 });
             });
@@ -51,9 +53,10 @@
             document.querySelectorAll('[data-modal-close]').forEach(button => {
                 button.addEventListener('click', (event) => {
                     let modalName = button.dataset.modalClose;
-                    console.log(modalName);
                     let modal = document.querySelector(`div[data-modal=${modalName}]`);
-                    modal.classList.add('hidden');
+                    modal.classList.remove('animate-fade-in');
+                    modal.classList.add('animate-fade-out');
+                    setTimeout(() => modal.classList.add('hidden'), 150);
                 });
             });
         </script>
