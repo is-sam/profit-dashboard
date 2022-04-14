@@ -33,12 +33,12 @@ class CustomCostType extends AbstractType
             ->add('amount', MoneyType::class)
             ->add('frequency', ChoiceType::class, [
                 'choices' => [
-                    'onetime' => 'One time',
-                    'daily' => 'Daily',
-                    'weekly' => 'Weekly',
-                    'monthly' => 'Monthly',
-                    'quarterly' => 'Quarterly',
-                    'yearly' => 'Yearly',
+                    CustomCost::FREQUENCY_ONETIME => 'One time',
+                    CustomCost::FREQUENCY_DAILY => 'Daily',
+                    CustomCost::FREQUENCY_WEEKLY => 'Weekly',
+                    CustomCost::FREQUENCY_MONTHLY => 'Monthly',
+                    CustomCost::FREQUENCY_QUARTERLY => 'Quarterly',
+                    CustomCost::FREQUENCY_YEARLY => 'Yearly',
                 ]
             ])
             ->add('cancel', ButtonType::class, [

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CustomCostRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CustomCostRepository::class)
@@ -25,6 +26,8 @@ class CustomCost
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Length(min=2)
      * @ORM\Column(type="string", length=255)
      */
     private $name;

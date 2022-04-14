@@ -86,6 +86,7 @@ class SettingsController extends AbstractController
 
         if ($customCostForm->isSubmitted() and $customCostForm->isValid()) {
             $settingsService->saveCustomCost($customCostForm->getData());
+            $this->addFlash('success', 'Custom cost added!');
         }
 
         $shop = $security->getUser();
