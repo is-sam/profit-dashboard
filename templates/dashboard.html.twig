@@ -6,23 +6,23 @@
 	<h2 class="text-2xl font-medium my-4">{{ 'dashboard.title' | trans }}</h2>
     <div class="grid md:grid-cols-4 mb-4">
         <div class="col-span-3">
-            {{ form_start(searchForm) }}
+            {{ form_start(form) }}
                 <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div class="grid grid-cols-1">
-                        {{ form_label(searchForm.dateStart) }}
-                        {{ form_widget(searchForm.dateStart) }}
+                        {{ form_label(form.dateStart) }}
+                        {{ form_widget(form.dateStart) }}
                     </div>
                     <div class="grid grid-cols-1">
-                        {{ form_label(searchForm.dateEnd) }}
-                        {{ form_widget(searchForm.dateEnd) }}
+                        {{ form_label(form.dateEnd) }}
+                        {{ form_widget(form.dateEnd) }}
                     </div>
                     <div class="grid grid-cols-1 content-end">
                         <div>
-                            {{ form_widget(searchForm.submit) }}
+                            {{ form_widget(form.submit) }}
                         </div>
                     </div>
                 </div>
-            {{ form_end(searchForm) }}
+            {{ form_end(form) }}
         </div>
     </div>
 

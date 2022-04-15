@@ -1,4 +1,4 @@
-<div data-modal="add_custom_cost" class="hidden animate-fade-in fixed flex items-center top-0 left-0 w-full h-screen bg-black/60 z-10">
+<div data-modal="add_custom_cost" class="{% if not form.vars.submitted or form.vars.valid %}hidden animate-fade-in{% endif %} fixed flex items-center top-0 left-0 w-full h-screen bg-black/60 z-10">
   <div class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg shadow-xl">
     <div class="flex flex-row justify-between p-6 bg-gray-800 border-b-2 border-gray-600 rounded-tl-lg rounded-tr-lg">
       <p class="font-semibold text-gray-200">Add a custom cost</p>
@@ -7,18 +7,18 @@
       </button>
     </div>
 
-    {{ form_start(customCostForm) }}
+    {{ form_start(form) }}
       <div class="flex flex-col px-6 py-5 bg-gray-800 gap-4">
-        {{ form_row(customCostForm.name) }}
-        {{ form_row(customCostForm.startDate) }}
-        {{ form_row(customCostForm.endDate) }}
-        {{ form_row(customCostForm.amount) }}
-        {{ form_row(customCostForm.frequency) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.startDate) }}
+        {{ form_row(form.endDate) }}
+        {{ form_row(form.amount) }}
+        {{ form_row(form.frequency) }}
       </div>
       <div class="flex flex-row items-center justify-between p-5 bg-gray-800 border-t-2 border-gray-600 rounded-bl-lg rounded-br-lg">
-        {{ form_row(customCostForm.cancel) }}
-        {{ form_row(customCostForm.add) }}
+        {{ form_row(form.cancel) }}
+        {{ form_row(form.add) }}
       </div>
-    {{ form_end(customCostForm) }}
+    {{ form_end(form) }}
   </div>
 </div>
