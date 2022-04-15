@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Class DefaultController.
@@ -34,7 +33,6 @@ class SettingsController extends AbstractController
 
     #[Route('/settings/cogs', name: 'settings_cogs')]
     public function cogs(
-        Request $request,
         ProductRepository $productRepository,
     ): Response {
         $shop = $this->getUser();
@@ -79,9 +77,10 @@ class SettingsController extends AbstractController
         Request $request,
         SettingsService $settingsService,
         CustomCostRepository $customCostRepository,
-        Security $security
     ): Response {
-        $customCostForm = $this->createForm(CustomCostType::class);
+        $customCostForm = $this->createForm(CustomCostType::class, null, [
+            'action' => $this->generateUrl('settings_custom'),
+        ]);
         $customCostForm->handleRequest($request);
 
         if ($customCostForm->isSubmitted() and $customCostForm->isValid()) {
@@ -89,14 +88,14 @@ class SettingsController extends AbstractController
             $this->addFlash('success', 'Custom cost added!');
         }
 
-        $shop = $security->getUser();
+        $shop = $this->getUser();
         $costs = $customCostRepository->findBy([
             'shop' => $shop,
         ]);
 
-        return $this->render('settings/custom.html.twig', [
+        return $this->renderForm('settings/custom.html.twig', [
             'costs' => $costs,
-            'customCostForm' => $customCostForm->createView(),
+            'form' => $customCostForm,
         ]);
     }
 
@@ -112,12 +111,11 @@ class SettingsController extends AbstractController
     // #[Route('/settings/shipping', name: 'settings_shipping')]
     // public function shipping(
     //     Request $request,
-    //     Security $security,
     //     SettingsService $settingsService,
     //     ShippingProfileRepository $shippingProfileRepository,
     //     VariantRepository $variantRepository,
     // ): Response {
-    //     $shop = $security->getUser();
+    //     $shop = $this->getUser();
 
     //     if ($request->isMethod('POST')) {
     //         $settingsService->saveShippingProfile($request->request->all());
