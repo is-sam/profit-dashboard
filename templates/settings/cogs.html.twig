@@ -14,7 +14,7 @@
     </div>
 
     {% if products %}
-    <table class="w-full text-sm text-left">
+    <table class="w-full text-sm text-center">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th class="px-6 py-3">Image</th>
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4 text-left">
                         {{ product.title }} ({{ product.variants | length }} variants)
                     </td>
                     <td class="px-6 py-4">-</td>
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-2">{{ variant.title }}</td>
+                    <td class="px-6 py-2 text-left">{{ variant.title }}</td>
                     <td class="px-6 py-2">
                         <input type="text" value="{{variant.cost}}" max="8" class="w-24 h-8 shadow appearance-none border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center invalid:border-red-500" disabled>
                         <button type="button" class="btn-edit" onclick="toggleEdit(this)"><i class="fa fa-edit"></i></button>
