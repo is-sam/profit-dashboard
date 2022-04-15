@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
@@ -19,11 +20,13 @@ class ShopifyAuthenticator extends AbstractAuthenticator implements Authenticati
 {
     protected ShopifyAuthHelper $shopifyAuthHelper;
     protected FlashBagInterface $flash;
+    protected RouterInterface $router;
 
-    public function __construct(ShopifyAuthHelper $shopifyAuthHelper, RequestStack $requestStack)
+    public function __construct(ShopifyAuthHelper $shopifyAuthHelper, RequestStack $requestStack, RouterInterface $router)
     {
         $this->shopifyAuthHelper = $shopifyAuthHelper;
         $this->flash = $requestStack->getSession()->getBag('flashes');
+        $this->router = $router;
     }
 
     public function supports(Request $request): ?bool
@@ -51,11 +54,11 @@ class ShopifyAuthenticator extends AbstractAuthenticator implements Authenticati
     {
         $this->flash->add('error', "Authentication failure: {$exception->getMessage()}");
 
-        return new RedirectResponse('/auth/login');
+        return new RedirectResponse($this->router->generate('auth_login_page'));
     }
 
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
-        return new RedirectResponse('/auth/login');
+        return new RedirectResponse($this->router->generate('auth_login_page'));
     }
 }
