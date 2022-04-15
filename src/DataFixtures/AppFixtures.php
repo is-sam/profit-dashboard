@@ -12,8 +12,8 @@ class AppFixtures extends Fixture
     {
         // Marketing sources
         $marketingSources = [
-            'facebook-ads'  => 'Facebook Ads',
-            'google-ads'    => 'Google Ads'
+            'facebook-ads' => 'Facebook Ads',
+            'google-ads' => 'Google Ads',
         ];
 
         foreach ($marketingSources as $slug => $label) {

@@ -6,9 +6,7 @@ use App\Entity\Product;
 use App\Entity\Variant;
 use DateTime;
 use Exception;
-use Shopify\Clients\Http;
 use Shopify\Clients\Rest;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * Class ShopifyAdminAPIService.
@@ -60,6 +58,7 @@ class ShopifyAdminAPIService extends AbstractService
 
         return true;
     }
+
     public function getOrders(DateTime $dateStart = null, DateTime $dateEnd = null): array
     {
         $client = $this->getClient();

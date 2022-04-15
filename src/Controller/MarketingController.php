@@ -8,11 +8,9 @@ use App\Repository\MarketingSourceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FacebookAds\Object\User as FacebookUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 
 class MarketingController extends AbstractController
 {
@@ -29,7 +27,6 @@ class MarketingController extends AbstractController
     #[Route('/marketing/{slug}', name: 'marketing_source', priority: -1)]
     public function index(
         string $slug,
-        Request $request,
         MarketingSourceRepository $marketingSourceRepository,
         MarketingAccountRepository $marketingAccountRepository
     ): Response {
@@ -129,12 +126,10 @@ class MarketingController extends AbstractController
     #[Route('/marketing/{slug}/disconnect', name: 'marketing_source_disconnect')]
     public function disconnect(
         string $slug,
-        Request $request,
-        Security $security,
         MarketingSourceRepository $marketingSourceRepository,
         MarketingAccountRepository $marketingAccountRepository
     ): Response {
-        $shop = $security->getUser();
+        $shop = $this->getUser();
         $marketingSource = $marketingSourceRepository->findOneBy(['slug' => $slug]);
         if (empty($marketingSource)) {
             throw $this->createNotFoundException('Marketing source not found !');

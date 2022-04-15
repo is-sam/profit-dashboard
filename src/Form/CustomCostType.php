@@ -20,36 +20,36 @@ class CustomCostType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Custom expense name ...'
-                ]
+                    'placeholder' => 'Custom expense name ...',
+                ],
             ])
             ->add('startDate', DateType::class, [
-                'widget' => 'single_text'
+                'widget' => 'single_text',
             ])
             ->add('endDate', DateType::class, [
                 'widget' => 'single_text',
-                'required' => false
+                'required' => false,
             ])
             ->add('amount', MoneyType::class)
             ->add('frequency', ChoiceType::class, [
                 'choices' => [
-                    CustomCost::FREQUENCY_ONETIME => 'One time',
-                    CustomCost::FREQUENCY_DAILY => 'Daily',
-                    CustomCost::FREQUENCY_WEEKLY => 'Weekly',
-                    CustomCost::FREQUENCY_MONTHLY => 'Monthly',
-                    CustomCost::FREQUENCY_QUARTERLY => 'Quarterly',
-                    CustomCost::FREQUENCY_YEARLY => 'Yearly',
-                ]
+                    'One time' => CustomCost::FREQUENCY_ONETIME,
+                    'Daily' => CustomCost::FREQUENCY_DAILY,
+                    'Weekly' => CustomCost::FREQUENCY_WEEKLY,
+                    'Monthly' => CustomCost::FREQUENCY_MONTHLY,
+                    'Quarterly' => CustomCost::FREQUENCY_QUARTERLY,
+                    'Yearly' => CustomCost::FREQUENCY_YEARLY,
+                ],
             ])
             ->add('cancel', ButtonType::class, [
                 'attr' => [
-                    'data-modal-close' => 'add_custom_cost'
-                ]
+                    'data-modal-close' => 'add_custom_cost',
+                ],
             ])
             ->add('add', SubmitType::class, [
                 'attr' => [
-                    'class' => 'px-4 py-2 text-white font-semibold bg-blue-500 rounded'
-                ]
+                    'class' => 'px-4 py-2 text-white font-semibold bg-blue-500 rounded',
+                ],
             ])
         ;
     }
