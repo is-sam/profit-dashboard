@@ -3,14 +3,12 @@
 {% block title %}Settings - COGS{% endblock %}
 
 {% block body %}
-    <div class="grid grid-cols-4 mb-4">
-        <h2 class="text-2xl font-medium my-4 col-span-3">{{ 'settings.cogs.title' | trans }}</h2>
+    <div class="flex justify-between mb-10 mt-5">
+        <h2 class="text-2xl font-medium">{{ 'settings.cogs.title' | trans }}</h2>
 
-        <div class="mb-4 flex flex-row-reverse">
-            <a href="{{ path('settings_sync_products') }}" class="px-4 py-3 bg-green-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
-                <i class="fa fa-sync pr-2"></i> Sync Products
-            </a>
-        </div>
+        <button href="{{ path('settings_sync_products') }}" class="btn btn-primary">
+            <i class="fa fa-sync pr-2"></i><span>Sync Products</span>
+        </button>
     </div>
 
     {% if products %}

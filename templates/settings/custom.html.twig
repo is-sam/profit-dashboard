@@ -3,14 +3,12 @@
 {% block title %}Settings - Custom Costs{% endblock %}
 
 {% block body %}
-    <div class="grid grid-cols-4 mb-4">
-        <h2 class="text-2xl font-medium my-4 col-span-3">{{ 'settings.custom.title' | trans }}</h2>
+    <div class="flex justify-between mb-10 mt-5">
+        <h2 class="text-2xl font-medium">{{ 'settings.custom.title' | trans }}</h2>
 
-        <div class="mb-4 flex flex-row-reverse">
-            <button data-modal-btn='add_custom_cost' class="px-4 py-3 bg-green-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform">
-                <span><i class="fa fa-plus pr-2"></i> Add</span>
-            </button>
-        </div>
+        <button data-modal-btn='add_custom_cost' class="btn btn-primary">
+            <i class="fa fa-plus pr-2"></i><span>Add</span>
+        </button>
     </div>
 
     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">

@@ -4,7 +4,11 @@
 
 @layer components {
     .btn {
-        @apply px-4 py-3 rounded-md text-gray-800 font-medium bg-gray-200 hover:bg-gray-400 focus:ring-4 transform active:scale-y-75 transition-transform flex;
+        @apply px-4 py-3 rounded font-medium outline-none items-center focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform text-gray-800 bg-gray-200 hover:bg-gray-400;
+    }
+
+    .btn-primary {
+        @apply bg-green-600 text-white hover:bg-green-500;
     }
 
     /** Form classes **/
@@ -13,7 +17,7 @@
     }
 
     .form-label {
-        @apply mb-4 font-semibold text-gray-200;
+        @apply font-semibold text-gray-200;
     }
 
     .form-widget {
