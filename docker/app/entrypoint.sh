@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# composer install
-# npm install
-# npm run dev
-symfony console doctrine:migrations:migrate -n
-symfony serve -d
+echo "Starting apache2 ..."
+service apache2 start
+
+echo "Starting local tunnel ..."
 lt -s profitdashboard -p 8000
