@@ -37,6 +37,7 @@ class DashboardService extends AbstractService
     {
         // REST call: get orders by date range
         $orders = $this->adminAPI->getOrders($dateStart, $dateEnd);
+        // dd($dateStart, $dateEnd, $orders);
 
         // REST call: get Facebook Ad spend
         $fbAdSpend = $this->facebookAPI->getAdSpendByDate($dateStart, $dateEnd);

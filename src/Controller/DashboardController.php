@@ -7,6 +7,7 @@ use App\Form\Type\DashboardSearchType;
 use App\Service\DashboardService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,11 +30,11 @@ class DashboardController extends AbstractController
 
         $data = $dashboardService->getData($dashboardSearch->getDateStart(), $dashboardSearch->getDateEnd());
 
-        return $this->renderForm('dashboard.html.twig', [
-            'form' => $searchForm,
+        return $this->render('dashboard.html.twig', [
+            'form' => $searchForm->createView(),
             'data' => $data,
             'dateStart' => $dashboardSearch->getDateStart(),
             'dateEnd' => $dashboardSearch->getDateEnd(),
-        ]);
+        ], new Response(null, ($searchForm->isSubmitted() and $searchForm->isValid()) ? 422 : 200));
     }
 }
