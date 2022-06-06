@@ -10,7 +10,7 @@ RUN apt-get install -y libicu-dev && \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # install nodejs & npm
-RUN apt install -y nodejs npm
+RUN apt install -y nodejs npm zip unzip
 
 # install localtunnel
 RUN npm install -g localtunnel-https
