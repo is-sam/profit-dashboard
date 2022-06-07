@@ -31,8 +31,8 @@ class AuthController extends AbstractController
             return $this->redirectToRoute('auth_login', ['shop' => $formData['shop']]);
         }
 
-        return $this->render('auth/login.html.twig', [
-            'loginForm' => $loginForm->createView(),
+        return $this->renderForm('auth/login.html.twig', [
+            'loginForm' => $loginForm,
         ]);
     }
 

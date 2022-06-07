@@ -15,11 +15,13 @@
         {% endblock %}
     </head>
     <body class="bg-gray-900 text-gray-200 leading-tight flex">
-        {% include "_sidebar.html.twig" %}
+        {% block outer %}
+            {% include "_sidebar.html.twig" %}
 
-        <div class="container p-4 pl-20 md:pl-72">
-            {% block body %}{% endblock %}
-        </div>
+            <div class="container p-4 pl-20 md:pl-72">
+                {% block body %}{% endblock %}
+            </div>
+        {% endblock %}
 
         <div class="absolute right-0 top-0 m-4 flex flex-col justify-top-right items-end gap-4">
             {% for type, messages in app.flashes %}
@@ -28,28 +30,6 @@
                 {% endfor %}
             {% endfor %}
         </div>
-
-        <script>
-            document.querySelectorAll('[data-modal-btn]').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    let modalName = button.dataset.modalBtn;
-                    let modal = document.querySelector(`div[data-modal=${modalName}]`);
-                    modal.classList.remove('animate-fade-out');
-                    modal.classList.add('animate-fade-in');
-                    modal.classList.remove('hidden');
-                });
-            });
-
-            document.querySelectorAll('[data-modal-close]').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    let modalName = button.dataset.modalClose;
-                    let modal = document.querySelector(`div[data-modal=${modalName}]`);
-                    modal.classList.remove('animate-fade-in');
-                    modal.classList.add('animate-fade-out');
-                    setTimeout(() => modal.classList.add('hidden'), 150);
-                });
-            });
-        </script>
 
         <script>
             window.fbAsyncInit = function() {
