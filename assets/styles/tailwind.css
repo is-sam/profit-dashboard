@@ -27,4 +27,16 @@
     .form-checkbox {
         @apply rounded border-2 border-gray-200;
     }
+
+    .toast-success {
+        @apply text-green-500 bg-green-100  dark:bg-green-800 dark:text-green-200;
+    }
+
+    .toast-warning {
+        @apply text-orange-500 bg-orange-100 dark:bg-orange-700 dark:text-orange-200;
+    }
+
+    .toast-error {
+        @apply text-red-500 bg-red-100 dark:bg-red-800 dark:text-red-200;
+    }
 }
