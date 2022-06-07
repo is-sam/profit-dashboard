@@ -6,7 +6,7 @@
     <div class="flex justify-between mb-10 mt-5">
         <h2 class="text-2xl font-medium">{{ 'settings.custom.title' | trans }}</h2>
 
-        <button data-modal-btn='add_custom_cost' class="btn btn-primary">
+        <button data-controller="modal" data-action="modal#open" data-modal-name-param="add_custom_cost" class="btn btn-primary">
             <i class="fa fa-plus pr-2"></i><span>Add</span>
         </button>
     </div>
@@ -49,5 +49,5 @@
         </tbody>
     </table>
 
-    {% include 'settings/_add-custom-cost-modal.html.twig' %}
+    {% include 'modals/_add-custom-cost-modal.html.twig' %}
 {% endblock %}
