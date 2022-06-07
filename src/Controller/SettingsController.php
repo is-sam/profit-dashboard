@@ -53,11 +53,15 @@ class SettingsController extends AbstractController
         return $this->redirectToRoute('settings_cogs');
     }
 
-    #[Route('/settings/cogs/{variant}/update', name: 'settings_cogs_update')]
+    #[Route('/settings/cogs/{id}/update', name: 'settings_cogs_update')]
     public function cogsUpdate(
         Variant $variant,
         Request $request,
     ): Response {
+        if ($variant->getProduct()->getShop() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $data = json_decode($request->getContent(), true);
 
         $newCost = $data['cost'];

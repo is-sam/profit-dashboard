@@ -12,7 +12,7 @@
             </div>
         {% endfor %}
 
-        {{ form(loginForm) }}
+        {{ form(loginForm, {attr: {'data-turbo': 'false'}}) }}
     </div>
 
 {% endblock %}

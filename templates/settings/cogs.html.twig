@@ -46,10 +46,15 @@
                         </div>
                     </td>
                     <td class="px-6 py-2 text-left">{{ variant.title }}</td>
-                    <td class="px-6 py-2">
-                        <input type="text" value="{{variant.cost}}" max="8" class="w-24 h-8 shadow appearance-none border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center invalid:border-red-500" disabled>
-                        <button type="button" class="btn-edit" onclick="toggleEdit(this)"><i class="fa fa-edit"></i></button>
-                        <button type="submit" class="btn-save hidden" onclick="saveCost(this, {{variant.id}})"><i class="fa fa-save"></i></button>
+                    <td class="px-6 py-2" data-controller="cogs">
+                        <input type="text" value="{{variant.cost}}" max="8" data-cogs-target="cost"
+                            class="w-24 h-8 shadow appearance-none border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center invalid:border-red-500" disabled>
+                        <button type="button" class="btn-edit" data-action="cogs#edit" data-cogs-target="edit">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button type="submit" class="btn-save" data-action="cogs#save" data-cogs-url-param="{{path('settings_cogs_update', {id: variant.id})}}" data-cogs-target="save" hidden>
+                            <i class="fa fa-save"></i>
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -57,39 +62,7 @@
         </tbody>
     </table>
     {% else %}
-    <p>Product list is empty, try syncing products first</p>
+        <p>Product list is empty, try syncing products first</p>
     {% endif %}
 
-{% endblock %}
-
-{% block javascripts %}
-    <script>
-        function toggleEdit(e) {
-            let editButton = e;
-            let input = e.parentElement.getElementsByTagName('input')[0];
-            let buttons = e.parentElement.getElementsByTagName('button');
-            input.disabled = !input.disabled;
-            for (button of buttons) {
-                button.classList.toggle('hidden');
-            }
-        }
-
-        function saveCost(e, variantId) {
-            let cost = e.parentElement.getElementsByTagName('input')[0].value;
-            let data = {cost: cost};
-
-            fetch(`/settings/cogs/${variantId}/update`, {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            }).then(res => {
-                console.log("Request complete! response:", res);
-                if (res.status === 200) {
-                    toggleEdit(e);
-                } else {
-                    alert(res.statusText);
-                }
-            });
-        }
-    </script>
 {% endblock %}
