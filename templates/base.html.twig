@@ -8,30 +8,24 @@
 
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
-            {# <link rel="stylesheet" href="https://unpkg.com/@shopify/polaris@7.3.1/build/esm/styles.css"/> #}
-        {# <link rel="stylesheet" href="https://unpkg.com/@shopify/polaris@5.0.0/dist/styles.css"/> #}
-        {# <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> #}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-            integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"
-        />
+            {# <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+                integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"
+            /> #}
         {% endblock %}
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-            <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
+            {# <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script> #}
         {% endblock %}
     </head>
     <body class="bg-gray-900 text-gray-200 leading-tight flex">
         {% include "_sidebar.html.twig" %}
+
         <div class="container p-4 pl-20 md:pl-72">
             {% block body %}{% endblock %}
-            {% if app.request.get('debug') %}
-                <br>
-                {{ dump(app.request.query.all()) }}
-                {{ dump(app.session.all()) }}
-            {% endif %}
         </div>
+
         <div class="fixed right-0 top-0 p-2 sm:p-6">
             {% for type, messages in app.flashes %}
                 {% for id, message in messages %}
@@ -39,6 +33,7 @@
                 {% endfor %}
             {% endfor %}
         </div>
+
         <script>
             document.querySelectorAll('[data-modal-btn]').forEach(button => {
                 button.addEventListener('click', (event) => {
