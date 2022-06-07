@@ -39,7 +39,7 @@ class AuthController extends AbstractController
     #[Route('/auth/login/{shop}', name: 'auth_login')]
     public function auth(string $shop)
     {
-        $oAuthResponse = OAuth::begin($shop, $this->generateUrl('auth_callback'), true);
+        $oAuthResponse = OAuth::begin($shop, $this->generateUrl('auth_callback'), false);
 
         return new RedirectResponse($oAuthResponse);
     }
