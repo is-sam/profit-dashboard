@@ -30,7 +30,7 @@
                     <td class="px-6 py-4">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                                <img src="https://via.placeholder.com/35" class="w-full h-full rounded-full" alt="Product Thumbnail">
+                                <img src="{{ product.image ?? 'https://via.placeholder.com/35'}}" class="w-full h-full rounded-full" alt="Product Thumbnail">
                             </div>
                         </div>
                     </td>
@@ -44,7 +44,7 @@
                     <td class="px-6 py-2" colspan=2>
                         <div class="flex items-center">
                             <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                                <img src="https://via.placeholder.com/35" class="w-full h-full rounded-full" alt="Product Thumbnail">
+                                <img src="{{ variant.image ?? 'https://via.placeholder.com/35'}}" class="w-full h-full rounded-full" alt="Product Thumbnail">
                             </div>
                         </div>
                     </td>

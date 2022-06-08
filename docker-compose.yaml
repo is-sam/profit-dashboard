@@ -24,6 +24,7 @@ services:
             - .:/var/www
             - ./docker/app/apache.conf:/etc/apache2/sites-available/000-default.conf
             - ./docker/app/entrypoint.sh:/home/docker-entrypoint.sh
+        tty: true
         ports:
             - 8000:8000
         command: /home/docker-entrypoint.sh

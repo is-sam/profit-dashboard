@@ -36,7 +36,7 @@ class Variant
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="variants")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $product;
 
@@ -44,6 +44,11 @@ class Variant
      * @ORM\ManyToMany(targetEntity=ShippingProfile::class, mappedBy="variants")
      */
     private $shippingProfiles;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
 
     public function __construct()
     {
@@ -126,6 +131,18 @@ class Variant
         if ($this->shippingProfiles->removeElement($shippingProfile)) {
             $shippingProfile->removeVariant($this);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

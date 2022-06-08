@@ -64,9 +64,8 @@ class SettingsController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        $newCost = $data['cost'];
+        $newCost = floatval($data['cost']);
 
-        // TODO: validate cost
         $variant->setCost($newCost);
         $this->entityManager->flush();
 

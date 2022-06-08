@@ -23,6 +23,7 @@ class ShopifyAdminAPIService extends AbstractService
     public const PRODUCTS_ID = 'id';
     public const PRODUCTS_TITLE = 'title';
     public const PRODUCTS_HANDLE = 'handle';
+    public const PRODUCTS_IMAGES = 'images';
 
     public const VARIANTS = 'variants';
     public const VARIANTS_ID = 'id';
@@ -104,6 +105,7 @@ class ShopifyAdminAPIService extends AbstractService
             self::PRODUCTS_TITLE,
             self::PRODUCTS_HANDLE,
             self::VARIANTS,
+            self::PRODUCTS_IMAGES,
         ];
 
         $params = [
@@ -118,8 +120,6 @@ class ShopifyAdminAPIService extends AbstractService
         }
 
         $products = $response[self::PRODUCTS];
-        // dd($products);
-
         return $products;
     }
 
@@ -175,7 +175,17 @@ class ShopifyAdminAPIService extends AbstractService
     public function syncProducts()
     {
         $shopifyProducts = $this->getProducts();
+        $shopifyProducts = array_combine(array_column($shopifyProducts, self::PRODUCTS_ID), $shopifyProducts);
+        
+        $this->saveProductsAndVariants($shopifyProducts);
+        
+        $this->deleteProducts($shopifyProducts);
 
+        $this->getOrphanVariants();
+    }
+
+    private function saveProductsAndVariants($shopifyProducts)
+    {
         foreach ($shopifyProducts as $shopifyProduct) {
             /** @var Product $product */
             $product = $this->entityManager->getRepository(Product::class)
@@ -194,6 +204,17 @@ class ShopifyAdminAPIService extends AbstractService
 
             $product->setTitle($shopifyProduct[self::PRODUCTS_TITLE]);
             $product->setHandle($shopifyProduct[self::PRODUCTS_HANDLE]);
+
+            $images = $shopifyProduct[self::PRODUCTS_IMAGES];
+            $variantImages = [];
+            foreach ($images as $image) {
+                if ($image['position'] == 1) {
+                    $product->setImage($image['src']);
+                }
+                foreach ($image['variant_ids'] as $variantId) {
+                    $variantImages[$variantId] = $image['src'];
+                }
+            }
 
             foreach ($shopifyProduct[self::VARIANTS] as $shopifyVariant) {
                 /** @var Variant $variant */
@@ -216,15 +237,39 @@ class ShopifyAdminAPIService extends AbstractService
                 if (null === $variant->getCost()) {
                     $variant->setCost($inventoryItem[self::VARIANTS_COST]);
                 }
+
+                if ($image = ($variantImages[$variant->getIdentifier()] ?? null)) {
+                    $variant->setImage($image);
+                }
             }
         }
 
         $this->entityManager->flush();
+    }
+    
+    private function deleteProducts($shopifyProducts)
+    {
+        $products = $this->entityManager->getRepository(Product::class)
+            ->findBy(['shop' => $this->shop]);
+        
+        foreach ($products as $product) {
+            if (!in_array($product->getIdentifier(), array_column($shopifyProducts, self::PRODUCTS_ID))) {
+                $this->entityManager->remove($product);
+                continue;
+            }
 
-        $this->getOrphanVariants();
+            $variantIds = array_column($shopifyProducts[$product->getIdentifier()][self::VARIANTS], self::VARIANTS_ID);
+            foreach ($product->getVariants() as $variant) {
+                if (!in_array($variant->getIdentifier(), $variantIds)) {
+                    $this->entityManager->remove($variant);
+                }
+            }
+        }
+        
+        $this->entityManager->flush();
     }
 
-    public function getOrphanVariants()
+    private function getOrphanVariants()
     {
         $orders = $this->getOrders();
 
