@@ -60,12 +60,12 @@ class MarketingController extends AbstractController
             'account' => $marketingAccount,
             'adAccounts' => $adAccounts,
             'adAccountId' => $adAccountId ?? null,
+            'facebookAppId' => $this->getParameter('facebook.app.id'),
         ]);
     }
 
     #[Route('/marketing/facebook-ads/get-user-ad-accounts', name: 'marketing_fb_user_accounts', methods: ['POST'])]
     public function getFacebookAdAccounts(
-        string $userId,
         Request $request,
     ): Response {
         $content = json_decode($request->getContent(), true);

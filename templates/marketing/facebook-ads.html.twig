@@ -3,6 +3,7 @@
 {% block title %}{{ source.name }}{% endblock %}
 
 {% block body %}
+<div data-controller="facebook">
     <h3 class="text-2xl font-medium my-4 col-span-3">{{ source.name }}</h3>
 
     <div class="border rounded border-gray-700 w-full p-4">
@@ -14,7 +15,7 @@
             </a>
         {% else %}
             <p>No account connected</p>
-            <button onclick="loginFacebook()" class="mt-4 px-4 py-3 bg-gray-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform">
+            <button data-action="facebook#login" class="mt-4 px-4 py-3 bg-gray-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform">
                 Connect
             </button>
         {% endif %}
@@ -37,7 +38,8 @@
                     <td class="px-5 py-3">{{ adAccount.name }}</td>
                     <td>{{ adAccount.account_id }}</td>
                     <td>
-                        <input type="radio" name="ad_account" class="hover:cursor-pointer" value="{{ adAccount.account_id }}" {% if adAccountId == adAccount.account_id %}checked{% endif %}>
+                        <input type="radio" name="ad_account" class="hover:cursor-pointer" value="{{ adAccount.account_id }}" data-facebook-target="adAccount"
+                            {% if adAccountId == adAccount.account_id %}checked{% endif %}>
                         {% if adAccountId == adAccount.account_id %}
                             <label class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-600 bg-indigo-50 rounded-full">ACTIVE</label>
                         {% endif %}
@@ -46,53 +48,26 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button onclick="saveAdAccount()" class="mt-4 px-4 py-3 bg-green-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform">
+        <button data-action="facebook#save" class="mt-4 px-4 py-3 bg-green-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform">
             Save
         </button>
     </div>
     {% endif %}
+</div>
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
+
     <script>
-        function loginFacebook() {
-            FB.login(function(response){
-                if (response.status === 'connected') {
-                    console.log('connected', response);
-                    let data = {userId: response.authResponse.userID};
-
-                    fetch(`/marketing/facebook-ads/get-user-ad-accounts`, {
-                        method: "POST",
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(data)
-                    }).then(res => {
-                        console.log("response:", res);
-                    });
-
-                    /* fetch(`/marketing/facebook-ads/set-data`, {
-                        method: "POST",
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(data)
-                    }).then(res => {
-                        console.log("Request complete! response:", res);
-                        window.location.reload();
-                    }); */
-                }
-            });
-        }
-
-        function saveAdAccount() {
-            let accountId = document.querySelector('input[name="ad_account"]:checked').value;
-            let data = {accountId: accountId};
-
-            fetch(`/marketing/facebook-ads/set-data`, {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            }).then(res => {
-                console.log("Request complete! response:", res);
-                window.location.reload();
-            });
-        }
+    window.fbAsyncInit = function() {
+        FB.init({
+        appId            : {{ facebookAppId }},
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v14.0'
+        });
+    };
     </script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 {% endblock %}
