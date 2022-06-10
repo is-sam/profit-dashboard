@@ -5,11 +5,12 @@ namespace App\Command;
 use App\Entity\Shop;
 use App\Service\ShopifyAdminAPIService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ShopifySyncCommand extends Command
+class ShopifyProductSyncCommand extends Command
 {
     protected static $defaultName = 'app:shopify:products:sync';
     protected ShopifyAdminAPIService $adminAPI;
@@ -31,19 +32,23 @@ class ShopifySyncCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('Sync Products Command !');
+        $output->writeln('Sync Products & Variants Command !');
 
         $shops = $this->entityManager->getRepository(Shop::class)
             ->findAll();
 
         $shopsCount = count($shops);
 
-        $output->writeln("Found $shopsCount shops");
+        $output->writeln("Syncing $shopsCount shops");
 
         foreach ($shops as $shop) {
             $output->writeln("Shop: {$shop->getUrl()}");
             $this->adminAPI->setShop($shop);
-            $this->adminAPI->syncProducts();
+            try {
+                $this->adminAPI->syncProducts();
+            } catch (Exception $e) {
+                $output->writeln("Error: {$e->getMessage()}");
+            }
         }
 
         return Command::SUCCESS;

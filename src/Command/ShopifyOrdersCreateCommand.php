@@ -8,9 +8,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ShopifyPopulateCommand extends Command
+class ShopifyOrdersCreateCommand extends Command
 {
-    protected static $defaultName = 'app:shopify:populate';
+    protected static $defaultName = 'app:shopify:orders:create';
 
     protected VariantRepository $variantRepository;
 
