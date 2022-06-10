@@ -27,6 +27,7 @@ class ShopifyAdminAPIService extends AbstractService
 
     public const VARIANTS = 'variants';
     public const VARIANTS_ID = 'id';
+    public const VARIANTS_VARIANT_ID = 'variant_id';
     public const VARIANTS_TITLE = 'title';
     public const VARIANTS_COST = 'cost';
     public const VARIANTS_INVENTORY_ITEM_ID = 'inventory_item_id';
@@ -176,12 +177,12 @@ class ShopifyAdminAPIService extends AbstractService
     {
         $shopifyProducts = $this->getProducts();
         $shopifyProducts = array_combine(array_column($shopifyProducts, self::PRODUCTS_ID), $shopifyProducts);
-        
+
         $this->saveProductsAndVariants($shopifyProducts);
         
         $this->deleteProducts($shopifyProducts);
 
-        $this->getOrphanVariants();
+        $this->getOrphanVariants($shopifyProducts);
     }
 
     private function saveProductsAndVariants($shopifyProducts)
@@ -250,7 +251,7 @@ class ShopifyAdminAPIService extends AbstractService
     private function deleteProducts($shopifyProducts)
     {
         $products = $this->entityManager->getRepository(Product::class)
-            ->findBy(['shop' => $this->shop]);
+            ->findBy(['shop' => $this->shop, 'status' => Product::STATUS_ACTIVE]);
         
         foreach ($products as $product) {
             if (!in_array($product->getIdentifier(), array_column($shopifyProducts, self::PRODUCTS_ID))) {
@@ -269,9 +270,19 @@ class ShopifyAdminAPIService extends AbstractService
         $this->entityManager->flush();
     }
 
-    private function getOrphanVariants()
+    /**
+     * @param array<Product> $shopifyProducts
+     */
+    private function getOrphanVariants(array $shopifyProducts)
     {
         $orders = $this->getOrders();
+        $shopifyVariants = array_reduce(
+            $shopifyProducts, 
+            fn ($carry, $product) => array_merge(
+                $carry, array_column($product[self::VARIANTS], self::VARIANTS_ID)
+            ),
+            []
+        );
 
         /** @var Product $placeholderProduct */
         $placeholderProduct = $this->entityManager->getRepository(Product::class)
@@ -284,6 +295,7 @@ class ShopifyAdminAPIService extends AbstractService
             $placeholderProduct = new Product();
             $placeholderProduct->setStatus(Product::STATUS_PLACEHOLDER);
             $placeholderProduct->setShop($this->shop);
+            $this->entityManager->persist($placeholderProduct);
         }
 
         $variants = $placeholderProduct->getVariants();
@@ -291,15 +303,14 @@ class ShopifyAdminAPIService extends AbstractService
 
         foreach ($orders as $order) {
             foreach ($order[self::LINE_ITEMS] as $lineItem) {
-                if (false === $lineItem['product_exists']) {
-                    if (!in_array($lineItem[self::LINE_ITEMS_NAME], $variants)) {
-                        $variant = (new Variant())
-                            ->setProduct($placeholderProduct)
-                            ->setTitle($lineItem[self::LINE_ITEMS_NAME]);
+                if (!in_array($lineItem[self::VARIANTS_VARIANT_ID], $shopifyVariants) and !in_array($lineItem[self::LINE_ITEMS_NAME], $variants)) {
+                    $variant = new Variant();
+                    $variant->setProduct($placeholderProduct);
+                    $variant->setTitle($lineItem[self::LINE_ITEMS_NAME]);
+                    $variant->setIdentifier($lineItem[self::VARIANTS_VARIANT_ID]);
+                    $variants[] = $lineItem[self::LINE_ITEMS_NAME];
 
-                        $this->entityManager->persist($placeholderProduct);
-                        $this->entityManager->persist($variant);
-                    }
+                    $this->entityManager->persist($variant);
                 }
             }
         }

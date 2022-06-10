@@ -3,14 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\CustomCost;
-use App\Entity\ShippingProfile;
 use App\Entity\Variant;
 use App\Form\CustomCostType;
 use App\Repository\CustomCostRepository;
 use App\Repository\ProductRepository;
-use App\Repository\ShippingProfileRepository;
-use App\Repository\VariantRepository;
-use App\Service\SettingsService;
 use App\Service\ShopifyAdminAPIService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -78,79 +74,35 @@ class SettingsController extends AbstractController
     #[Route('/settings/custom-costs', name: 'settings_custom')]
     public function custom(
         Request $request,
-        SettingsService $settingsService,
         CustomCostRepository $customCostRepository,
     ): Response {
-        $customCostForm = $this->createForm(CustomCostType::class, null, [
-            'action' => $this->generateUrl('settings_custom'),
-        ]);
+        $shop = $this->getUser();
+
+        $customCostForm = $this->createForm(CustomCostType::class);
         $customCostForm->handleRequest($request);
 
         if ($customCostForm->isSubmitted() and $customCostForm->isValid()) {
-            $settingsService->saveCustomCost($customCostForm->getData());
+            $customCostRepository->save($customCostForm->getData(), $shop);
             $this->addFlash('success', 'Custom cost added!');
 
             return $this->redirectToRoute('settings_custom');
         }
 
-        $shop = $this->getUser();
         $costs = $customCostRepository->findBy([
             'shop' => $shop,
         ]);
 
         return $this->renderForm('settings/custom.html.twig', [
-            'costs' => $costs,
             'form' => $customCostForm,
+            'costs' => $costs,
         ]);
     }
 
     #[Route('/settings/custom-costs/{customCost}/delete', name: 'settings_custom_delete')]
-    public function custom_delete(CustomCost $customCost): Response
+    public function custom_delete(CustomCost $customCost, CustomCostRepository $customCostRepository): Response
     {
-        $this->entityManager->remove($customCost);
-        $this->entityManager->flush();
+        $customCostRepository->remove($customCost);
 
         return $this->redirectToRoute('settings_custom');
     }
-
-    // #[Route('/settings/shipping', name: 'settings_shipping')]
-    // public function shipping(
-    //     Request $request,
-    //     SettingsService $settingsService,
-    //     ShippingProfileRepository $shippingProfileRepository,
-    //     VariantRepository $variantRepository,
-    // ): Response {
-    //     $shop = $this->getUser();
-
-    //     if ($request->isMethod('POST')) {
-    //         $settingsService->saveShippingProfile($request->request->all());
-    //     }
-
-    //     // $variants = $variantRepository->getVariantsByShop($shop);
-
-    //     $profiles = $shippingProfileRepository->findBy([
-    //         'shop' => $shop,
-    //         'isVariantProfile' => false
-    //     ]);
-
-    //     // $variantProfiles = $shippingProfileRepository->findBy([
-    //     //     'shop' => $shop,
-    //     //     'isVariantProfile' => true
-    //     // ]);
-
-    //     return $this->render('settings/shipping.html.twig', [
-    //         // 'variants' => $variants,
-    //         'profiles' => $profiles,
-    //         // 'variantProfiles' => $variantProfiles,
-    //     ]);
-    // }
-
-    // #[Route('/settings/shipping/{profile}/delete', name: 'settings_shipping_delete')]
-    // public function shippinh_delete(ShippingProfile $profile): Response
-    // {
-    //     $this->entityManager->remove($profile);
-    //     $this->entityManager->flush();
-
-    //     return $this->redirectToRoute('settings_shipping');
-    // }
 }

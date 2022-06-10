@@ -67,25 +67,27 @@ class DashboardCalculator
         foreach ($customCosts as $customCost) {
             $intersectionStart = max($startDate, $customCost->getStartDate());
             $intersectionEnd = $customCost->getEndDate() ? min($endDate, $customCost->getEndDate()) : $endDate;
-            // dd($endDate, $customCost->getEndDate());
             if ($intersectionStart > $intersectionEnd) {
                 continue;
             }
 
             $dateDiff = $intersectionStart->diff($intersectionEnd);
-            $dayCost = $this->getDayCost($customCost);
             $days = $dateDiff->days + 1;
-            $totalCost = $dayCost * $days;
-            $globalCost += $totalCost;
-            $this->logger->info("CUSTOM COST {$customCost->getName()} $days x $dayCost = ($totalCost)");
+
+            $cost = $this->getCustomCost($customCost, $days);
+            $globalCost += $cost;
+
+            $this->logger->info("CUSTOM COST {$customCost->getName()} $cost");
         }
 
         return $globalCost;
     }
 
-    private function getDayCost(CustomCost $customCost)
+    private function getCustomCost(CustomCost $customCost, int $days): float
     {
-        $dateDiff = $customCost->getStartDate()->diff($customCost->getEndDate() ?? new DateTime());
+        if ($customCost->getFrequency() === CustomCost::FREQUENCY_ONETIME) {
+            return $customCost->getAmount();
+        }
 
         $frequencyToDayRatio = [
             CustomCost::FREQUENCY_DAILY => 1,
@@ -93,10 +95,9 @@ class DashboardCalculator
             CustomCost::FREQUENCY_MONTHLY => 30,
             CustomCost::FREQUENCY_QUARTERLY => 91,
             CustomCost::FREQUENCY_YEARLY => 365,
-            CustomCost::FREQUENCY_ONETIME => $dateDiff->days + 1,
         ];
 
-        return $customCost->getAmount() / $frequencyToDayRatio[$customCost->getFrequency()];
+        return $customCost->getAmount() / $frequencyToDayRatio[$customCost->getFrequency()] * $days;
     }
 
     protected function getTotalRefundValue(array $orders): float

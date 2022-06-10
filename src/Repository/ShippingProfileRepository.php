@@ -19,32 +19,34 @@ class ShippingProfileRepository extends ServiceEntityRepository
         parent::__construct($registry, ShippingProfile::class);
     }
 
-    // /**
-    //  * @return ShippingProfile[] Returns an array of ShippingProfile objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(array $data)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $profile = new ShippingProfile();
+        $profile
+            ->setShop($this->shop)
+            ->setName($data['name'])
+            ->setCost($data['cost']);
 
-    /*
-    public function findOneBySomeField($value): ?ShippingProfile
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (!empty($data['countries'])) {
+            $profile->setCountries($data['countries']);
+        }
+
+        if (!empty($data['variants'])) {
+            foreach ($data['variants'] as $variantId) {
+                $variantRepository = $this->entityManager->getRepository(Variant::class);
+                $variant = $variantRepository->find($variantId);
+                $profile->addVariant($variant);
+            }
+            $profile->setIsVariantProfile(true);
+        }
+
+        $this->entityManager->persist($profile);
+        $this->entityManager->flush();
     }
-    */
+
+    public function remove(ShippingProfile $profile)
+    {
+        $this->entityManager->remove($profile);
+        $this->entityManager->flush();
+    }
 }

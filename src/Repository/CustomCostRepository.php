@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\CustomCost;
+use App\Entity\Shop;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,20 @@ class CustomCostRepository extends ServiceEntityRepository
         parent::__construct($registry, CustomCost::class);
     }
 
-    // /**
-    //  * @return CustomCost[] Returns an array of CustomCost objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(CustomCost $customCost, Shop $shop)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $customCost->setShop($shop);
+        if ($customCost->getFrequency() === CustomCost::FREQUENCY_ONETIME) {
+            $customCost->setEndDate($customCost->getStartDate());
+        }
 
-    /*
-    public function findOneBySomeField($value): ?CustomCost
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->_em->persist($customCost);
+        $this->_em->flush();
     }
-    */
+
+    public function remove(CustomCost $cost)
+    {
+        $this->_em->remove($cost);
+        $this->_em->flush();
+    }
 }

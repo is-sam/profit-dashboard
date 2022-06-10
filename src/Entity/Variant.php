@@ -65,7 +65,7 @@ class Variant
         return $this->title;
     }
 
-    public function setIdentifier(string $identifier): self
+    public function setIdentifier(?string $identifier): self
     {
         $this->identifier = $identifier;
 
