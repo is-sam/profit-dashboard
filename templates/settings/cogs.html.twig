@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="flex justify-between mb-10 mt-5">
-        <h2 class="text-2xl font-medium">{{ 'settings.cogs.title' | trans }}</h2>
+        <h2 class="text-2xl font-medium">{{ 'settings.cogs.title' | trans }} ({{ products| reduce((sum, p) => sum + (p.variants | length)) }})</h2>
 
         <a href="{{ path('settings_sync_products') }}" class="btn btn-primary">
             <i class="fa fa-sync pr-2"></i><span>Sync Products</span>
