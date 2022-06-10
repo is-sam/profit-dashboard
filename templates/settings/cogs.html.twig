@@ -22,7 +22,7 @@
         </thead>
         {% for product in products %}
             <tbody data-controller="table">
-                <tr data-action="click->table#toggle" class="bg-white dark:bg-gray-800 border-gray-700 cursor-pointer {% if loop.index != loop.length %} border-b{% endif %}">
+                <tr data-action="click->table#toggle" class="bg-white dark:bg-gray-800 border-gray-700 cursor-pointer border-t">
                     <td>
                         <span data-table-target="iconClosed"><i class="fa fa-angle-right"></i></span>
                         <span data-table-target="iconOpend" hidden><i class="fa fa-angle-down"></i></span>
@@ -40,7 +40,7 @@
                     <td class="px-6 py-4">-</td>
                 </tr>
                 {% for variant in product.variants %}
-                <tr class="border-b border-gray-700 bg-gray-600 text-sm" data-table-target="subrow" hidden>
+                <tr class="border-t border-gray-700 bg-gray-600 text-sm" data-table-target="subrow" hidden>
                     <td class="px-6 py-2" colspan=2>
                         <div class="flex items-center">
                             <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">

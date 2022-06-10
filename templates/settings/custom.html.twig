@@ -25,7 +25,7 @@
 
         <tbody>
             {% for cost in costs %}
-                <tr class="bg-white {% if loop.index != loop.length %}border-b{% endif %} dark:bg-gray-800 border-gray-700">
+                <tr class="bg-white border-t dark:bg-gray-800 border-gray-700">
                     <td class="px-6 py-4 text-left">{{ cost.name }}</td>
                     <td class="px-6 py-4">{{ cost.startDate ? cost.startDate | date('Y-m-d') : '-' }}</td>
                     <td class="px-6 py-4">{{ cost.endDate ? (cost.endDate | date('Y-m-d')) : '-' }}</td>
