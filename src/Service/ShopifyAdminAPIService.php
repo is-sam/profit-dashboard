@@ -277,9 +277,10 @@ class ShopifyAdminAPIService extends AbstractService
     {
         $orders = $this->getOrders();
         $shopifyVariants = array_reduce(
-            $shopifyProducts, 
+            $shopifyProducts,
             fn ($carry, $product) => array_merge(
-                $carry, array_column($product[self::VARIANTS], self::VARIANTS_ID)
+                $carry,
+                array_column($product[self::VARIANTS], self::VARIANTS_ID)
             ),
             []
         );
