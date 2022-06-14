@@ -13,7 +13,7 @@
 
     {% if products %}
     <table class="w-full text-sm text-center">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <thead class="text-xs bg-gray-700 text-gray-400">
             <tr>
                 <th class="px-6 py-3" colspan=2>Image</th>
                 <th class="px-6 py-3">Title</th>
@@ -22,7 +22,7 @@
         </thead>
         {% for product in products %}
             <tbody data-controller="table">
-                <tr data-action="click->table#toggle" class="bg-white dark:bg-gray-800 border-gray-700 cursor-pointer border-t">
+                <tr data-action="click->table#toggle" class="bg-gray-800 border-gray-700 cursor-pointer border-t">
                     <td>
                         <span data-table-target="iconClosed"><i class="fa fa-angle-right"></i></span>
                         <span data-table-target="iconOpend" hidden><i class="fa fa-angle-down"></i></span>

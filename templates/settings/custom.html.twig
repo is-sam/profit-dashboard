@@ -11,8 +11,8 @@
         </button>
     </div>
 
-    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-center text-gray-400">
+        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
             <tr>
                 <th class="px-6 py-3">Name</th>
                 <th class="px-6 py-3">Start Date</th>
@@ -25,7 +25,7 @@
 
         <tbody>
             {% for cost in costs %}
-                <tr class="bg-white border-t dark:bg-gray-800 border-gray-700">
+                <tr class="border-t bg-gray-800 border-gray-700">
                     <td class="px-6 py-4 text-left">{{ cost.name }}</td>
                     <td class="px-6 py-4">{{ cost.startDate ? cost.startDate | date('Y-m-d') : '-' }}</td>
                     <td class="px-6 py-4">{{ cost.endDate ? (cost.endDate | date('Y-m-d')) : '-' }}</td>
@@ -40,7 +40,7 @@
                 </tr>
             {% endfor %}
             {% if not costs %}
-                <tr class="bg-white dark:bg-gray-800">
+                <tr class="bg-gray-800">
                     <td class="px-6 py-4 text-sm w-1/10" colspan=6>
                         No custom costs have been added. Make sure you add your custom costs.
                     </td>

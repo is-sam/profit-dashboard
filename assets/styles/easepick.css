@@ -1,0 +1,4 @@
+.container[data-theme="dark"] {
+    --color-bg-inrange: #235170;
+    --color-fg-primary: #2a7e9d;
+}
