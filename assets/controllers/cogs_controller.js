@@ -4,9 +4,7 @@ export default class extends Controller {
     static targets = ['cost', 'edit', 'save'];
 
     edit() {
-        this.editTarget.hidden = true;
-        this.saveTarget.hidden = false;
-        this.costTarget.disabled = false;
+        this.editMode(true);
     }
 
     save({params: {url}}) {
@@ -19,10 +17,14 @@ export default class extends Controller {
                 console.log('Error while saving cost');
                 return;
             }
-            this.costTarget.disabled = true;
-            this.saveTarget.hidden = true;
-            this.editTarget.hidden = false;
+            this.editMode(false);
         });
+    }
+
+    editMode(mode) {
+        this.editTarget.hidden = mode;
+        this.saveTarget.hidden = !mode;
+        this.costTarget.disabled = !mode;
     }
 
 }

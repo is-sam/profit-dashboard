@@ -171,4 +171,12 @@ class Product
 
         return $this;
     }
+
+    public function getAverageCost()
+    {
+        $totalCost = array_reduce($this->variants->toArray(), function ($carry, $item) {
+            return $carry + $item->getCost();
+        });
+        return $totalCost / count($this->variants);
+    }
 }

@@ -11,6 +11,10 @@
         @apply bg-green-600 text-white hover:bg-green-500;
     }
 
+    .btn-link {
+        @apply bg-transparent hover:bg-transparent text-white hover:text-gray-300 shadow-none focus:ring-0;
+    }
+
     /** Form classes **/
     .form-row {
         @apply w-full;
@@ -39,4 +43,12 @@
     .toast-error {
         @apply bg-red-800 text-red-200;
     }
+
+    .tooltip {
+        @apply invisible absolute p-1 rounded bg-gray-900 shadow-lg ml-4 text-sm border border-gray-800;
+    }
+    
+    .has-tooltip:hover .tooltip {
+        @apply visible z-50
+    }     
 }

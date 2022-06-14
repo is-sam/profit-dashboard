@@ -34,9 +34,11 @@ class SettingsController extends AbstractController
         $shop = $this->getUser();
 
         $products = $productRepository->getProductsWithVariantsByShop($shop);
+        $orphanProducts = $productRepository->getOrphanVariantsByShop($shop);
 
         return $this->render('settings/cogs.html.twig', [
             'products' => $products,
+            'orphanProducts' => $orphanProducts,
         ]);
     }
 

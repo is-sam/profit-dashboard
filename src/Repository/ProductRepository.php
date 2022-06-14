@@ -55,6 +55,22 @@ class ProductRepository extends ServiceEntityRepository
             ->join('p.variants', 'v', 'with', 'v.product = p.id')
             ->andWhere('s.url = :shop')
             ->setParameter('shop', $shop->getUrl())
+            ->andWhere('p.status = :status')
+            ->setParameter('status', Product::STATUS_ACTIVE)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getOrphanVariantsByShop(Shop $shop): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.shop', 's')
+            ->join('p.variants', 'v', 'with', 'v.product = p.id')
+            ->andWhere('s.url = :shop')
+            ->setParameter('shop', $shop->getUrl())
+            ->andWhere('p.status = :status')
+            ->setParameter('status', Product::STATUS_PLACEHOLDER)
             ->getQuery()
             ->getResult()
         ;
