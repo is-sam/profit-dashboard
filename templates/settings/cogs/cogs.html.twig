@@ -12,14 +12,14 @@
     </div>
 
     {% if products %}
-        {% include 'components/cogs/products.html.twig' with {'products': products} %}
+        {% include 'settings/cogs/products.html.twig' with {'products': products} %}
     {% else %}
     <p>Product list is empty, try syncing products first</p>
     {% endif %}
 
     {% if orphanProducts %}
         <h3 class="mt-10 mb-5 text-2xl font-medium">Orphan Variants</h3>
-        {% include 'components/cogs/products.html.twig' with {'products': orphanProducts} %}
+        {% include 'settings/cogs/products.html.twig' with {'products': orphanProducts} %}
     {% endif %}
 
 

@@ -7,6 +7,7 @@ use App\Entity\Variant;
 use App\Form\CustomCostType;
 use App\Repository\CustomCostRepository;
 use App\Repository\ProductRepository;
+use App\Repository\VariantRepository;
 use App\Service\ShopifyAdminAPIService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,14 +30,27 @@ class SettingsController extends AbstractController
 
     #[Route('/settings/cogs', name: 'settings_cogs')]
     public function cogs(
+        Request $request,
         ProductRepository $productRepository,
+        VariantRepository $variantRepository,
     ): Response {
         $shop = $this->getUser();
+
+        // if ($request->getMethod() === 'POST') {
+        //     $cost = $request->request->get('cost');
+        //     $variantId = $request->request->get('variantId');
+        //     $variant = $variantRepository->find($variantId);
+        //     if ($variant) {
+        //         $variant->setCost(floatval($cost));
+        //         $this->entityManager->flush();
+        //     }
+        //     return $this->redirect($this->generateUrl('settings_cogs'));
+        // }
 
         $products = $productRepository->getProductsWithVariantsByShop($shop);
         $orphanProducts = $productRepository->getOrphanVariantsByShop($shop);
 
-        return $this->render('settings/cogs.html.twig', [
+        return $this->render('settings/cogs/cogs.html.twig', [
             'products' => $products,
             'orphanProducts' => $orphanProducts,
         ]);
@@ -61,7 +75,6 @@ class SettingsController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true);
-
         $newCost = floatval($data['cost']);
 
         $variant->setCost($newCost);

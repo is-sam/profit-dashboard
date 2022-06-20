@@ -13,12 +13,16 @@ export default class extends Controller {
             element: this.startDateTarget,
             css: [
                 'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.0/dist/index.css',
+                // 'https://cdn.jsdelivr.net/npm/@easepick/core@1.2.0/dist/index.css',
+                // 'https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.0/dist/index.css',
+                // 'https://cdn.jsdelivr.net/npm/@easepick/preset-plugin@1.2.0/dist/index.css',
                 '/build/easepick.css',
             ],
             grid: 2,
             calendars: 2,
             // format: 'DD/MM/YYYY',
             // autoApply: false,
+            readonly: false,
             firstDay: 1,
             zIndex: 10,
             plugins: [

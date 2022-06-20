@@ -1,0 +1,65 @@
+<table class="w-full text-sm text-center">
+    <thead class="text-xs bg-gray-700 text-gray-400">
+        <tr>
+            <th class="px-6 py-3" colspan=2>Image</th>
+            <th class="px-6 py-3">Title</th>
+            <th class="px-6 py-3">Cost</th>
+        </tr>
+    </thead>
+    {% for product in products %}
+        <tbody data-controller="table cogs">
+            <tr data-action="click->table#toggle" class="bg-gray-800 border-gray-700 cursor-pointer border-t">
+                <td>
+                    <span data-table-target="iconClosed"><i class="fa fa-angle-right"></i></span>
+                    <span data-table-target="iconOpend" hidden><i class="fa fa-angle-down"></i></span>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                            <img src="{{ product.image ?? 'https://via.placeholder.com/35'}}" class="w-full h-full rounded-full" alt="Product Thumbnail">
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-left">
+                    {{ product.title }} ({{ product.variants | length }} variants)
+                </td>
+                <td class="px-6 py-4">
+                    <span data-cogs-target="average">{{ product.averageCost | round(2) }}€</span>
+                    <span class="has-tooltip">
+                        <i class="fa fa-info text-xs align-top"></i>
+                        <span class='tooltip'>Average variants cost.</span>
+                    </span>
+                </td>
+            </tr>
+            {% for variant in product.variants %}
+            <tr class="border-t border-gray-700 bg-gray-600 text-sm" data-table-target="subrow" hidden>
+                <td class="px-6 py-2" colspan=2>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                            <img src="{{ variant.image ?? 'https://via.placeholder.com/35'}}" class="w-full h-full rounded-full" alt="Product Thumbnail">
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-2 text-left">{{ variant.title }}</td>
+                <td class="px-6 py-2" data-controller="cogs">
+                    <span data-cogs-target="cost">{{ variant.cost ? variant.cost ~ '€' : '-' }}</span>
+                    <input type="text" value="{{variant.cost}}" max="8" data-cogs-target="costInput"
+                        class="w-24 h-8 shadow appearance-none border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center invalid:border-red-500" hidden>
+                    <button type="button" class="btn-edit" data-action="cogs#edit" data-cogs-target="edit">
+                        <span class="has-tooltip">
+                            <i class="fa fa-edit"></i>
+                            <span class='tooltip'>Edit Cost</span>
+                        </span>
+                    </button>
+                    <button type="submit" class="btn-save" data-action="cogs#save" data-cogs-url-param="{{path('settings_cogs_update', {id: variant.id})}}" data-cogs-target="save" hidden>
+                        <span class="has-tooltip">
+                            <i class="fa fa-save"></i>
+                            <span class='tooltip'>Save</span>
+                        </span>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>            
+    {% endfor %}
+</table>
