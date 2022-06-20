@@ -24,7 +24,7 @@
                     {{ product.title }} ({{ product.variants | length }} variants)
                 </td>
                 <td class="px-6 py-4">
-                    <span data-cogs-target="average">{{ product.averageCost | round(2) }}€</span>
+                    <span data-cogs-target="average">{{ product.averageCost | format_currency('EUR') }}</span>
                     <span class="has-tooltip">
                         <i class="fa fa-info text-xs align-top"></i>
                         <span class='tooltip'>Average variants cost.</span>
@@ -42,7 +42,7 @@
                 </td>
                 <td class="px-6 py-2 text-left">{{ variant.title }}</td>
                 <td class="px-6 py-2" data-controller="cogs">
-                    <span data-cogs-target="cost">{{ variant.cost ? variant.cost ~ '€' : '-' }}</span>
+                    <span data-cogs-target="cost" {{ variant.cost == null ? 'class="text-orange-300"' }}>{{ variant.cost | format_currency('EUR') }}</span>
                     <input type="text" value="{{variant.cost}}" max="8" data-cogs-target="costInput"
                         class="w-24 h-8 shadow appearance-none border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center invalid:border-red-500" hidden>
                     <button type="button" class="btn-edit" data-action="cogs#edit" data-cogs-target="edit">

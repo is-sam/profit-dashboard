@@ -32,7 +32,7 @@
                     <td class="px-6 py-4">{{ cost.frequency }}</td>
                     <td class="px-6 py-4">{{ cost.amount | format_currency('EUR') }}</td>
                     <td class="px-6 py-4">
-                        <a href="{{ path('settings_custom_delete', {customCost: cost.id}) }}">
+                        <a href="{{ path('settings_custom_delete', {customCost: cost.id}) }}" data-controller="confirm" data-action="confirm#confirm" data-confirm-message-value="Do you really want to delete this cost ?">
                             <i class="fa fa-trash text-red-500 hover:text-red-600"></i>
                             <span class="sr-only">Delete</span>
                         </a>

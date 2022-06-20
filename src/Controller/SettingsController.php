@@ -79,6 +79,7 @@ class SettingsController extends AbstractController
 
         $variant->setCost($newCost);
         $this->entityManager->flush();
+        $this->addFlash('success', 'Cost updated');
 
         return new JsonResponse([
             'success' => true,

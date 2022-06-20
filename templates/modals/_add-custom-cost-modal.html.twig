@@ -12,8 +12,8 @@
     {{ form_start(form) }}
       <div class="flex flex-col px-6 py-5 bg-gray-800 gap-4">
         {{ form_row(form.name) }}
-        {{ form_row(form.startDate) }}
-        {{ form_row(form.endDate) }}
+        {{ form_row(form.startDate, {attr: {'data-controller': 'datepicker'}}) }}
+        {{ form_row(form.endDate, {attr: {'data-controller': 'datepicker'}}) }}
         {{ form_row(form.amount) }}
         {{ form_row(form.frequency) }}
       </div>

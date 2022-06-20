@@ -17,7 +17,8 @@ export default class extends Controller {
                 console.log('Error while saving cost');
                 return;
             }
-            this.costTarget.innerHTML = `${this.costInputTarget.value}€`;
+            window.location.reload();
+            // this.costTarget.innerHTML = `${this.costInputTarget.value}€`;
             this.editMode(false);
         });
     }
