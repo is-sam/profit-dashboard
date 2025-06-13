@@ -50,3 +50,12 @@ symfony serve
 Alternatively, the Docker container runs Apache via the entrypoint script `docker/app/entrypoint.sh` when using `docker-compose up`.
 
 The application will be available at <http://localhost:8000>.
+
+## Test store only credentials
+
+Below are credentials used only by the `app:shopify:orders:create` command in order to generate test orders:
+
+- `SHOPIFY_STORE_DOMAIN` – the full domain of your Shopify test store (e.g. `example.myshopify.com`).
+- `SHOPIFY_ADMIN_API_TOKEN` – the Admin API access token for that store.
+
+Set these variables in `.env.local` or your deployment environment before running the command.
