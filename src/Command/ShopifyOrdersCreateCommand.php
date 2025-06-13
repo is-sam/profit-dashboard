@@ -29,7 +29,10 @@ class ShopifyOrdersCreateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $client = new Rest('issam-dev-store.myshopify.com', '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');
+        $client = new Rest(
+            getenv('SHOPIFY_STORE_DOMAIN') ?: '',
+            getenv('SHOPIFY_ADMIN_API_TOKEN') ?: ''
+        );
         $variants = $this->variantRepository->findAll();
 
         if (empty($variants)) {
